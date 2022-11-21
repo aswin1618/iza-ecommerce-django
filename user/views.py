@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .forms import RegistrationForm
 
 
 # Create your views here.
@@ -9,8 +10,11 @@ def signin(request):
     return render(request,'accounts/login.html')
 
 def register(request):
-    
-    return render(request,'accounts/signup.html')
+    form = RegistrationForm()
+    context = {
+        'form': form
+    }
+    return render(request,'accounts/signup.html',context)
 
 
 def signout(request):   

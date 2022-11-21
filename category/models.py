@@ -20,6 +20,7 @@ class Category(models.Model):
 
 class SubCategory(models.Model):
     subcat_name = models.CharField(max_length=50 , unique=True)
+    slug = models.SlugField(max_length=100 , unique=True, null=True)
     category_name = models.ForeignKey(Category,on_delete = models.CASCADE)
 
     class Meta:

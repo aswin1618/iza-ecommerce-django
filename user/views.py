@@ -4,6 +4,8 @@ from .models import Account
 from django.contrib import messages,auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from carts.models import Cart,CartItem
+from carts.views import _cart_id
 
 #verification email
 
@@ -71,6 +73,43 @@ def signin(request):
         
         
         if user is not None:
+            try:
+                cart = Cart.objects.get(cart_id = _cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+                if is_cart_item_exists:
+                    cart_item = CartItem.objects.filter(cart=cart)
+                    
+                    # getting the product variation by cart_id
+                    product_variation = []
+                    for item in cart_item:
+                        variation = item.variations.all()
+                        product_variation.append(list(variation))
+                        
+                        
+                    #Get the cart items from user to access his product variaton
+                    cart_item = CartItem.objects.filter(user=user)
+                    ex_var_list = []
+                    id = []
+                    for item in cart_item:
+                            existing_variation = item.variations.all()
+                            ex_var_list.append(list(existing_variation))
+                            id.append(item.id)
+                            
+                    for pr in product_variation:
+                        if pr in ex_var_list:
+                            index= ex_var_list.index(pr)
+                            item_id = id[index]
+                            item = CartItem.objects.get(id=item_id)
+                            item.quantity +=1
+                            item.user =user
+                            item.save()
+                        else:
+                            cart_item=CartItem.objects.filter(cart=cart)  
+                            for item in cart_item:
+                                item.user = user
+                                item.save()
+            except:
+                pass
             auth.login(request, user)
             messages.success(request,'you are logged in')
             return redirect('home')

@@ -6,6 +6,22 @@
 {% block content %}
 
 <section class="signin-page account">
+
+  {% if request.GET.command == 'verification' %}
+
+
+    <div class="container mx-auto alert alert-info text-center" role="alert" style ="max-width:1024px; margin-top:100px;">
+    Thank you for registering with us. We have sent a verification email, please verify to continue shopping with us [{{ request.GET.email }}]
+    <br> <br>
+    Already verified? 
+    <a style="background-color: black;
+    color: white; 
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;" href="{% url 'signin' %}"> login here </a>
+    </div>
+
+  {% else %}
   <div class="container">
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
@@ -24,22 +40,29 @@
           </svg>
           </a>
           <h2 class="text-center">Welcome Back</h2>
-          <form class="text-left clearfix" action="index.html" >
-            <div class="form-group">
-              <input type="text" class="form-control"  placeholder="Username">
-            </div>
-            <div class="form-group">
-              <input type="password" class="form-control" placeholder="Password">
-            </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-main text-center" >Login</button>
-            </div>
+          {% include 'includes/alerts.html' %}
+          <form class="text-left clearfix" action="{% url 'signin' %}" method="POST" >
+              {% csrf_token %}
+              <div class="form-group">
+                <input type="email" class="form-control"  placeholder="email adress" name="email">
+              </div>
+
+              <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" name="password">
+              </div>
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-main text-center" >Login</button>
+              </div>
+
           </form>
           <p class="mt-20">New in this site ?<a href="{% url 'register'%}"> Create New Account</a></p>
+          <p><a href="{% url 'forgotpassword'%}"> Forgot your password?</a></p>
         </div>
       </div>
     </div>
   </div>
+  {% endif %}
 </section>
 
     <!-- 

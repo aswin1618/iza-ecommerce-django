@@ -6,7 +6,9 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('category_name',)}
 
 class SubCategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug':('subcat_name',)}
+    list_display = ('subcat_name','category_name')
+    prepopulated_fields = {'slug':('category_name','subcat_name',)}
+    list_filter = ('category_name',)
 
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(SubCategory,SubCategoryAdmin)

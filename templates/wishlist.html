@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% load static%}
+
+{% block content %}
+
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="page-name">Wishlist</h1>
+					<ol class="breadcrumb">
+						<li><a href="index.html">Home</a></li>
+						<li class="active">Wishlist</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% include 'includes/alerts.html' %}
+
+
+<div class="page-wrapper">
+  <div class="cart shopping">
+    <div class="container">
+      {% if not wishlist_items %}
+          <h2 class="text-center"> Your Wishlist is empty !!</h2> 
+          <div class="text-center"> 
+            <a href=" {% url 'home' %} " class="btn btn-main mt-20">Continue shopping</a>
+          </div>
+
+      {%else%}
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="block">
+            <div class="product-list">
+              <form method="post">
+                <table class="table">
+                  <thead>
+                    
+                  </thead>
+                  <tbody>
+                    {% for wishlist_item in wishlist_items %}
+                    <tr class="">
+                      <td class="">
+                        <div class="product-info">
+                          <img width="190" height="180" src="{{ wishlist_item.product.images.url }}" alt="" />                        
+                        </div>
+                      </td>
+                      <td>
+                        <h4>{{ wishlist_item.product.brand }} {{ wishlist_item.product.product_name }}</h4>
+                      </td>
+                      <td>
+                        <h6>₹{{ wishlist_item.product.price }}</h6> 
+                        
+                      </td>
+                      <td>
+                        <a class="btn btn-danger" href="{% url 'remove_wish_item' wishlist_item.product.id wishlist_item.id %}" onclick="return confirm('Are you sure you want to remove this item?')">remove</a>
+                        <a href="{{ wishlist_item.product.get_url }}" class="btn btn-primary"> <i class="tf-ion-android-cart"></i></a>
+                      </td>
+
+                    </tr> 
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
+
+    <!-- 
+    Essential Scripts
+    =====================================-->
+    
+    <!-- Main jQuery -->
+    <script src="plugins/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.1 -->
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Touchpin -->
+    <script src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <!-- Instagram Feed Js -->
+    <script src="plugins/instafeed/instafeed.min.js"></script>
+    <!-- Video Lightbox Plugin -->
+    <script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+    <!-- Count Down Js -->
+    <script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+
+    <!-- slick Carousel -->
+    <script src="plugins/slick/slick.min.js"></script>
+    <script src="plugins/slick/slick-animation.min.js"></script>
+
+    <!-- Google Mapl -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
+    <script type="text/javascript" src="plugins/google-map/gmap.js"></script>
+
+    <!-- Main Js File -->
+    <script src="js/script.js"></script>
+    
+
+
+  </body>
+  </html>
+
+
+
+{% endblock %}

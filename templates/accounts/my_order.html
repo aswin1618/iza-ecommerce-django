@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% load static%}
+{% block content %}
+
+
+<section class="user-dashboard page-wrapper">
+  <div class="container">
+    {% include 'includes/dashboard_topbar.html' %}
+    <div class="row">
+      <div class="col-md-12">
+        
+        <div class="dashboard-wrapper dashboard-user-dashboard">
+          <div class="media">
+              
+            </div>
+            <div class="media-body">
+							<h2 class="media-heading">Your Order History: </h2> <br><br><br>
+						</div>
+                      {% comment %} 1 {% endcomment %}
+
+                      
+
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <table class="table table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Order nummber</th>
+                                    <th scope="col">Billing name</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">Order total</th>
+                                    <th scope="col">Order date</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                 {% for order in orders %}
+                                  <tr>
+                                    <th scope="row">{{ order.order_number }}</th>
+                                    <td>{{ order.first_name }}</td>
+                                    <td>{{ order.phone }}</td>
+                                    <td>{{ order.order_total }}</td>
+                                    <td>{{ order.created_at }}</td>
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                              </table>    
+                            
+                              
+                            </div>
+                          </div>
+                        </div>
+
+                        
+              
+            
+              
+                      </div>
+            </div>
+          </div>
+
+        </section>
+    <!-- 
+    Essential Scripts
+    =====================================-->
+    
+    <!-- Main jQuery -->
+    <script src="plugins/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.1 -->
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Touchpin -->
+    <script src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <!-- Instagram Feed Js -->
+    <script src="plugins/instafeed/instafeed.min.js"></script>
+    <!-- Video Lightbox Plugin -->
+    <script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+    <!-- Count Down Js -->
+    <script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+
+    <!-- slick Carousel -->
+    <script src="plugins/slick/slick.min.js"></script>
+    <script src="plugins/slick/slick-animation.min.js"></script>
+
+    <!-- Google Mapl -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
+    <script type="text/javascript" src="plugins/google-map/gmap.js"></script>
+
+    <!-- Main Js File -->
+    <script src="js/script.js"></script>
+    
+
+
+  </body>
+  </html>
+
+{% endblock %}

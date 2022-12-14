@@ -20,23 +20,19 @@ def add_cart(request,product_id):
      #if the user is  authenticated
      if current_user.is_authenticated:
           product_variation = []
+          
           if request.method == 'POST':
-               for item in request.POST:
-                    key = item
-                    value = request.POST[key]
+               color = request.POST['color']
+               size = request.POST['size']
+               try:
+                    variation = Variation.objects.get(product=product, color__iexact=color, size__iexact=size)
+                    product_variation.append(variation)
+               except:
+                    pass
+                    print(product_variation)
 
-                    try:
-                         variation = Variation.objects.get(product=product,variation_category__iexact=key, variation_value__iexact=value)
-                         product_variation.append(variation)
-                    except:
-                         pass
-
-
+          print(product_variation)
           
-         
-
-          
-
           is_cart_item_exists = CartItem.objects.filter(product=product,user=current_user).exists()
           if is_cart_item_exists:
                cart_item = CartItem.objects.filter(product=product, user=current_user)
@@ -78,18 +74,16 @@ def add_cart(request,product_id):
      else:
           product_variation = []
           if request.method == 'POST':
-               for item in request.POST:
-                    key = item
-                    value = request.POST[key]
+               color = request.POST['color']
+               size = request.POST['size']
 
-                    try:
-                         variation = Variation.objects.get(product=product,variation_category__iexact=key, variation_value__iexact=value)
-                         product_variation.append(variation)
-                    except:
-                         pass
+               try:
+                    variation = Variation.objects.get(product=product,color=color, size=size)
+                    product_variation.append(variation)
+               except:
+                    pass
 
 
-          
           try:
                cart = Cart.objects.get(cart_id=_cart_id(request)) #getting the cart using the cart id in the session
           except Cart.DoesNotExist:
@@ -196,8 +190,11 @@ def cart(request, total=0, quantity=0, cart_items=None):
 @login_required(login_url='signin')
 def checkout(request, total=0, quantity=0, cart_items=None):
      try:
-          cart = Cart.objects.get(cart_id= _cart_id(request))
-          cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+          if request.user.is_authenticated:
+               cart_items = CartItem.objects.filter(user=request.user, is_active=True)
+          else:
+               cart = Cart.objects.get(cart_id= _cart_id(request))
+               cart_items = CartItem.objects.filter(cart=cart, is_active=True)
           for cart_item in cart_items:
                total += (cart_item.product.price * cart_item.quantity)
                quantity += cart_item.quantity

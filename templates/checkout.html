@@ -26,7 +26,7 @@
             <div class="col-md-8">
                <div class="block billing-details">
                   <h4 class="widget-title">Billing Details</h4>
-                  <form class="checkout-form" action="" method="POST">
+                  <form class="checkout-form" action="{% url 'place_order' %}" method="POST">
                      {% csrf_token %}
                      <div class="checkout-country-code clearfix">
                         <div class="form-group">
@@ -38,7 +38,10 @@
                            <input type="text" class="form-control" id="full_name" placeholder=""name="last_name" required>
                         </div>
                      </div>
-                     
+                     <div class="form-group">
+                        <label for="">email</label>
+                        <input type="email" class="form-control" id="email" placeholder=""name="email" required>
+                     </div>
 
                      <div class="form-group">
                         <label for="">Address line 1</label>
@@ -51,7 +54,7 @@
                      <div class="checkout-country-code clearfix">
                         <div class="form-group">
                            <label for="">PINcode</label>
-                           <input type="text" class="form-control" id="full_name" placeholder="" name="pin" required>
+                           <input type="text" class="form-control" id="full_name" placeholder="" name="pin_code" required>
                         </div>
                         <div class="form-group">
                            <label for="">Phone Number</label>
@@ -70,15 +73,19 @@
                      </div>
                   
                </div>
-               <div class="block">
-                  <h4 class="widget-title">Payment Method</h4>
-                 
-                  
-                  <input type="radio" id="html" name="payment_method" value="cod">
-                  <label for="html">CASH ON DELIVERY</label><br>
-                  <input type="radio" id="css" name="payment_method" value="razorpay">
-                  <label for="css">RAZORPAY</label><br> 
-               </div>
+               <div class="well">
+              
+                  <h4 class="card-title my-4">Select payment method:</h4>
+                  <div class="col-6">
+                     <input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery" required>
+                     <label for="cash_on_delivery">CASH ON DELIVERY</label>
+                  </div>
+                  <div class="col-6">
+                    <input type="radio" id="razorpay" name="payment_method" value="razorpay">
+                    <label for="razorpay">RAZORPAY</label>
+                  </div>
+                </div>
+
             </div>
             <div> <div> <div> <div>
             <div class="col-md-1">
@@ -109,16 +116,20 @@
                                <tr class="">
                                  <td class="">
                                    <div class="product-info">
-                                     <img width="80" src="{{ cart_item.product.images.url }}" alt="" />                        
+                                     <img width="67" src="{{ cart_item.product.images.url }}" alt="" />                        
                                    </div>
                                  </td>
                                  <td>
-                                     <a href="{{ cart_item.product.get_url }}"> {{ cart_item.product.product_name }}</a>
-                                     <p class="text-muted small">
+                                     <a style="font-size: 10px" href="{{ cart_item.product.get_url }}"> {{ cart_item.product.product_name }}</a>
+                                     <p style="font-size: 7px" class="text-muted small">
                                        {% if cart_item.variations.all %}
-                                         {% for item in cart_item.variations.all %}
-                                           {{ item.variation_category |capfirst }} : {{ item.variation_value |capfirst }} <br>
-                                         {% endfor %}
+                                          {% for item in cart_item.variations.all %}
+                                             Color: {{ item.color |capfirst }} 
+                                          {% endfor %}
+                                          <br>
+                                          {% for item in cart_item.variations.all %}
+                                             size: {{ item.size |capfirst }} 
+                                          {% endfor %}
                                        {% endif %}
                                      </p>
                                  </td>
@@ -133,8 +144,17 @@
                               <h5> Total: ₹ {{ total }}</h5> 
                          
                        </div>
+                              {% comment %} <div class="">
+                                 <h4 class="card-title my-4">Select Payment method:</h4>
+                                 <div class="col-6"><input type="radio" id="cash_on_delivery" name="payment_method" value="cod">
+                                    <label for = "cash_on_delivery"> Cash On Delivery</label>
+                                 </div>
+                                 <div class="col-6"><input type="radio" id="razorpay" name="payment_method" value="razorpay">
+                                    <label for = "razorpay">RAZORPAY</label>
+                                 </div>
+                              </div> {% endcomment %}
                      </div> 
-                     <a href="confirmation.html" class="btn btn-main mt-20">Place Order</a >
+                     <button type="submit" class="btn btn-main text-center">place order</button>
                      </form>
                    </div>
                  </div>

@@ -1,149 +1,180 @@
-
 {% extends 'base.html' %}
 
 {% load static%}
 {% block content %}
 
 
-
 <section class="page-header">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				
 				<div class="content">
-					{% if 'search' in request.path %}
-					<h1 class="page-name">Search Results</h1>
+                    {% if 'search' in request.path %}
+                    <h1 class="page-name">Search Results</h1>
 					{% else%}
-					<h1 class="page-name">{{Category.category_name }}</h1>
+                    <h1 class="page-name">{{Category.category_name }}</h1>
 					<ol class="breadcrumb">
 						<li><a href="{% url 'home' %}">Home</a></li>
 						<li class="active">{{Category.category_name }}</li>
 					</ol>
 					{% endif %}
+					
 				</div>
-				
 			</div>
+			
 		</div>
 	</div>
 </section>
+
 
 
 <section class="products section">
 	<div class="container">
 		<div class="row">
 			{% if products %}
-							<div class="col-md-3">
-								<div class="widget">
-									<h4 class="widget-title">Short By</h4>
-									<form method="post" action="#">
-										<select class="form-control">
-											<option>Man</option>
-											<option>Women</option>
-											<option>Accessories</option>
-											<option>Shoes</option>
-										</select>
-									</form>
-								</div>
-								<div class="widget product-category">
-									<h4 class="widget-title">Categories</h4>
-									<div class="panel-group commonAccordion" id="accordion" role="tablist" aria-multiselectable="true">
-										<div class="panel panel-default">
-											<div class="panel-heading" role="tab" id="headingOne">
-												<h4 class="panel-title">
-													<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-													Shoes
-													</a>
-												</h4>
-											</div>
-										<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-											<div class="panel-body">
-												<ul>
-													<li><a href="#!">Brand & Twist</a></li>
-													<li><a href="#!">Shoe Color</a></li>
-													<li><a href="#!">Shoe Color</a></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-									<div class="panel panel-default">
-										<div class="panel-heading" role="tab" id="headingTwo">
-										<h4 class="panel-title">
-											<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-												Duty Wear
-											</a>
-										</h4>
-										</div>
-										<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-											<div class="panel-body">
-												<ul>
-													<li><a href="#!">Brand & Twist</a></li>
-													<li><a href="#!">Shoe Color</a></li>
-													<li><a href="#!">Shoe Color</a></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-									<div class="panel panel-default">
-										<div class="panel-heading" role="tab" id="headingThree">
-										<h4 class="panel-title">
-											<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-												WorkOut Shoes
-											</a>
-										</h4>
-										</div>
-										<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-											<div class="panel-body">
-												<ul>
-													<li><a href="#!">Brand & Twist</a></li>
-													<li><a href="#!">Shoe Color</a></li>
-													<li><a href="#!">Gladian Shoes</a></li>
-													<li><a href="#!">Swis Shoes</a></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+			<div class="col-md-12">
+				<div class="form-inline text-right">
+					<span class="mr-md-auto">sort by </span>
+					<select class="mr-2 form-control">
+						<option>Price</option>
+						<option>Trending</option>
+						<option>Most Popular</option>
+						<option>Cheapest</option>
+					</select>
+					<br><br><br>
+				</div>
+			</div><!-- sect-heading -->
+			<aside class="col-md-3">
+
+				
+
+				
+				<div class="filter-group">
+					<h3> shop by Category</h3>
+					<div class="filter-content collapse show" id="collapse_2">
+						<div class="panel-body">
+							{% for sub in sub_categories %} 
+							<ul>
+								<li><a href="{{ sub.get_ulr1 }}"> {{ sub.subcat_name}} </a> </li>
+							</ul>	
+							{% endfor %}
+						</div> <!-- card-body.// -->
+					</div>
+					<hr >
+				</div> <!-- filter-group .// -->
+
+				<div class="filter-group">
+					<h3> shop by brands</h3>
+					<div class="filter-content collapse show" id="collapse_4" >
+						<div class="card-body">
+						{% for prod in products %}
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light" > {{ prod.brand }} </span>
+						  </label>
+						{% endfor %}
+					</div><!-- card-body.// -->
+					</div>
+				</div> <!-- filter-group .// -->
+
+				<div class="filter-group">
+					<h3> filter by price</h3>
+					<div class="filter-content collapse show" id="collapse_4" >
+						<div class="card-body">
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light" > under ₹1500  </span>
+						  </label><br>
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light" > ₹1500 - ₹3000 </span>
+						  </label><br>
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light" > ₹3000 above </span>
+						  </label>
+
+					</div><!-- card-body.// -->
+					</div>
+				</div> <!-- filter-group .// -->
+
+				<div class="filter-group">
+					<header class="card-header">
+						<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
+							<i class="icon-control fa fa-chevron-down" style="margin-top: 5px; float: right; font-size: 80%;" ></i>
+							<h6 class="title">Sizes </h6>
+						</a>
+					</header>
+					<div class="filter-content collapse show" id="collapse_4" style="">
+						<div class="card-body">
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light" > XS </span>
+						  </label> <br>
 			
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light"> SM </span>
+						  </label><br>
+			
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light"> LG </span>
+						  </label><br>
+			
+						  <label class="checkbox-btn">
+							<input type="checkbox">
+							<span class="btn btn-light"> XXL </span>
+						  </label>
+					</div><!-- card-body.// -->
+					</div>
+					<button class="btn btn-block btn-primary">Apply</button>
+					<button class="btn btn-block btn-default">reset</button>
+				</div> <!-- filter-group .// -->
+			</aside>
+			<div class="col-md-9">
+				<div class="row">
 			{% for product in products %}
-			<div class="col-md-3">
+					
+			<div class="col-md-4">
 				<div class="product-item">
 					<div class="product-thumb">
 						<span class="bage">Sale</span>
-						<img class="img-responsive" style="height:300px;"src="{{ product.images.url }}" alt="product-img" />
+                        <img class="img-responsive" style="height:270px;"src="{{ product.images.url }}" alt="product-img" />
 						<div class="preview-meta">
 							<ul>
 								<li>
-			                        <a href="#!" ><i class="tf-ion-ios-heart"></i></a>
+			                        <a href="{% url 'add_wish' product.id %}" ><i class="tf-ion-ios-heart"></i></a>
 								</li>
 								<li>
-									<a href="#!"><i class="tf-ion-android-cart"></i></a>
+									<a href="{{ product.get_url }}"><i class="tf-ion-android-cart"></i></a>
 								</li>
 							</ul>
                       	</div>
 					</div>
 					<div class="product-content">
-						<h4><a href=" {{ product.get_url }} "> {{ product.product_name }} </a></h4>
+						<h4><span style="cursor:pointer; "><a class="l1" href="{{ product.get_url }}">{{ product.product_name }}</a></span></h4>
 						<p class="price">₹ {{ product.price }}</p>
 					</div>
 				</div>
 			</div>
-            {% endfor %}
+			{% endfor %}
 			{% else %}
-			<div>
+		
+		
+					
 				<h2>No results found</h2>
-			</div>
-			{% endif %}
+
+			
+            {% endif %}
 		</div>
 	</div>
 </section>
 
 
-  <!-- paginator-->
-
-	<nav class="mt-4" aria-label="Page Navigation sample">
+     <!-- paginator-->
+	
+	 <nav aria-label="Page navigation" class="text-center">
 		{% if products.has_other_pages %}
 		<ul class="pagination">
 			{% if products.has_previous %}
@@ -168,8 +199,11 @@
 		</ul>
 		{% endif %}
 	</nav>
-  
-  <!-- 
+
+
+
+
+    <!-- 
     Essential Scripts
     =====================================-->
     

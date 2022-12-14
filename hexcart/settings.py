@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'home',
     'store',
     'carts',
+    'orders',
+    'wishlist',
 ]
 
 MIDDLEWARE = [
@@ -153,3 +155,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'peppywaltermitty@gmail.com'
 EMAIL_HOST_PASSWORD = 'anahacpfyugttznl'
 EMAIL_USE_TLS = True
+
+#razorpay
+RAZOR_KEY_ID = 'rzp_test_nCGq2eKcFYga3A'
+RAZOR_KEY_SECRET = 'm24zkA6wXfvMhPOX3hanDRf9'

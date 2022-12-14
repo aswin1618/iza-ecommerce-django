@@ -3,8 +3,9 @@
     {% for message in messages %}
 
     <div id="message" class="text-center">
-     <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
-        <button type="button" class="close" data-dissmiss="alert"> <span aria-hidden="true">&times;</span></button>
+     <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade in"{% endif %} role="alert">
+        {% comment %} <button type="button" class="close" data-dissmiss="alert"> <span aria-hidden="true">&times;</span></button> {% endcomment %}
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
         {{ message }}
       </div>

@@ -19,7 +19,7 @@ class Category(models.Model):
         return self.category_name
 
 class SubCategory(models.Model):
-    subcat_name = models.CharField(max_length=50 , unique=True)
+    subcat_name = models.CharField(max_length=50 )
     slug = models.SlugField(max_length=100 , unique=True, null=True)
     category_name = models.ForeignKey(Category,on_delete = models.CASCADE)
 
@@ -27,6 +27,8 @@ class SubCategory(models.Model):
         verbose_name = 'subcategory'
         verbose_name_plural = 'subcategories'   
     
+    def get_ulr1(self):
+        return reverse('products_by_subcategory', args = [self.category_name.slug, self.slug])
     
     def __str__(self):
         return self.subcat_name

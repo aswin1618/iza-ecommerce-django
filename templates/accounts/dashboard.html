@@ -2,61 +2,60 @@
 
 {% load static%}
 {% block content %}
-<section class="page-header">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="content">
-					<h1 class="page-name">Dashboard</h1>
-					<ol class="breadcrumb">
-						<li><a href="index.html">Home</a></li>
-						<li class="active">my account</li>
-					</ol>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<div style="align-items:right">
-<a style="background-color: black;
-color: white; 
-padding: 10px 20px;
-text-align: center;
-text-decoration: none;" href="{% url 'signout' %}"> logout </a>
-</div>
 
 <section class="user-dashboard page-wrapper">
   <div class="container">
+    {% include 'includes/dashboard_topbar.html' %}
     <div class="row">
       <div class="col-md-12">
-        <ul class="list-inline dashboard-menu text-center">
-          <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="order.html">Orders</a></li>
-          <li><a href="address.html">Address</a></li>
-          <li><a class="active"  href="profile-details.html">Profile Details</a></li>
-        </ul>
-        <div class="dashboard-wrapper dashboard-user-profile">
+        
+        <div class="dashboard-wrapper dashboard-user-dashboard">
           <div class="media">
-            <div class="pull-left text-center" href="#!">
-              <img class="media-object user-img" src="images/avater.jpg" alt="Image">
-              <a href="#x" class="btn btn-transparent mt-20">Change Image</a>
+              
             </div>
             <div class="media-body">
-              <ul class="user-profile-list">
-                <li><span>Full Name:</span>Johanna Doe</li>
-                <li><span>Country:</span>USA</li>
-                <li><span>Email:</span>mail@gmail.com</li>
-                <li><span>Phone:</span>+880123123</li>
-                <li><span>Date of Birth:</span>Dec , 22 ,1991</li>
-              </ul>
+							<h2 class="media-heading">logged in as: {{user.first_name}} {{user.last_name}}</h2> <br><br><br>
+						</div>
+                      {% comment %} 1 {% endcomment %}
+
+                      <div class="col-sm-6">
+                        <div class="card text-center">
+                          <div class="card-body">
+                            <img src="https://www.w3schools.com/howto/img_avatar.png " alt="Avatar" class="avatar" width="80px" height="80px" style="border-radius:50%;">
+                            <p class="mb-0"> {{ user.email }} </p>
+                            <p> {{ user.phone_number }} </p>
+                            <br>
+                            <br>
+                            <br>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="card text-center">
+                            <div class="card-body">
+                              <h3 class="card-title">Total orders</h3>
+                              <h1 class="card-title">{{ orders_count }}</h1>
+
+                              
+                              <a href="#" class="btn btn-primary"> view orders</a>
+                              <br>
+                            <br>
+                            <br>  
+                            </div>
+                          </div>
+                        </div>
+
+                        
+              
+            
+              
+                      </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
+        </section>
     <!-- 
     Essential Scripts
     =====================================-->

@@ -16,10 +16,10 @@
 								font-family="AustinBold, Austin" font-weight="bold">
 								<g id="Group" transform="translate(-108.000000, -297.000000)" fill="#000000">
 									<text id="AVIATO">
-										<tspan x="108.94" y="325">IZA</tspan>
+										<tspan x="145.94" y="326">IZA</tspan>
 									</text>
 								</g>
-							</g>
+							</g> 	 	
 						</svg>
 					</a>
 				</div>
@@ -33,16 +33,19 @@
 					<li>	
 							<form action="{% url 'search' %}" class="search" method="GET">
 									
-									<input type="search"  placeholder="Search..." name="keyword" style="margin-top:100px >
-										<div class="input-group-append d-inline">
-											<button type="submit" ">
-												<i class="tf-ion-ios-search-strong"></i> 
-											</button>
-										</div>
+											<div class="input-group col-md-12">
+												<input type="search" class="form-control input-md" placeholder="search" name="keyword" />
+												<span class="input-group-btn">
+													<button class="btn btn btn-md" type="submit">
+														<i class="tf-ion-ios-search-strong"></i>
+													</button>
+												</span>
+											</div>
 								</form>		
 					</li><!-- / Search -->
 				</ul><!-- / .nav .navbar-nav .navbar-right -->
 			</div>
+
 		</div>
 	</div>
 </section><!-- End Top Header Bar -->
@@ -77,19 +80,20 @@
 								<span class="tf-ion-ios-arrow-down"></span></a>
 							<ul class="dropdown-menu">
 
-								
-								<li><a href=" {{ category.get_ulr }} "> {{ category.category_name }} </a></li>
-								
+								{% for i in category.subcategory_set.all %}
+								<li><a href="{{ i.get_ulr1 }}"> {{ i.subcat_name }} </a></li>
+								{% endfor %}
 							</ul>
 						</li><!-- / category -->
 						{% endfor %}
 					
-					<li class="dropdown cart-nav dropdown-slide">
-						<a href="" class="tf-ion-ios-heart">wishlist<span class="badge badge-pill badge-danger notify"></span> </a>
-					</li><!-- / wishlist -->
+					
 					<li class="dropdown cart-nav dropdown-slide">
 						<a href="{% url 'cart'%} " class="tf-ion-android-cart">cart<span class="badge badge-pill badge-danger notify"> {{cart_count}} </span> </a>
 					</li><!-- / Cart -->
+					<li class="dropdown cart-nav dropdown-slide">
+						<a href="{% url 'wishlist'%} " class="tf-ion-ios-heart">wishlist</a>
+					</li><!-- / wishlist -->
 					
 					
 					<!-- profile -->
@@ -107,9 +111,7 @@
 						  {{ user.first_name }} </a>
 					</li><!-- / profile -->
 
-					<li class="dropdown ">
-						<a href="{% url 'signout'%}">logout</a>
-					</li><!-- / logout -->
+					
 					 {% endif %}
                     
 				</ul><!-- / .nav .navbar-nav -->

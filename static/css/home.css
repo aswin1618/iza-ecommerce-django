@@ -4,7 +4,9 @@
  * FACEBOOK: https://www.facebook.com/themefisher
  * GITHUB: https://github.com/themefisher/
  */
-
+.l1:hover{
+  size: 100px;
+}
 .hero-area {
   height: 650px;
   display: flex;

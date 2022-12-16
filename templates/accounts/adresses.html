@@ -8,20 +8,43 @@
   <div class="container">
     {% include 'includes/dashboard_topbar.html' %}
     
-      <div class="col-md-10 ">
+      <div class="col-md-10 col-md-offset-1 ">
         
         <div class="dashboard-wrapper dashboard-user-dashboard">
           <div class="media">
-              
+            {% include 'includes/alerts.html' %}
             </div>
             <div class="media-body">
 							<h2 class="media-heading">View adresses</h2> <br><br><br>
 						</div>
-                      
-            <p><a data-toggle="collapse" href="#footwear1" aria-expanded="false" aria-controls="footwear1">Heading</a>
-            </p>
-            <div class="collapse" id="footwear1">
+              <a class="btn btn-info" href="{% url 'add_adress' %}" > add new address +</a>  <br><br>
+                 {% for adress in adress_list %} 
+                <div class="row">
+                  <div class="col-md-8 text-center col-md-offset-2">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <a data-toggle="collapse" href="#collapse1">{{ adress.snap}}<br></a>
+                  </div>
+                  <div id="collapse1" class="panel-collapse collapse in">
+                  <div class="panel-body">{{ adress.user}} <br>{{ adress.phone}} <br>
+                    {{ adress.adress_line_1}} <br>
+                    {{ adress.adress_line_2}} <br>
+                    {{ adress.pin_code}} <br>
+                    {{ adress.district}} <br> {{ adress.city}}<br>{{ adress.state}}
+                 
+                  
+                
+                <a href="{% url 'edit_adress' adress.id %}" class="btn btn-primary">edit</a> 
+                <a class="btn btn-danger" href="{% url 'remove_adress' adress.id %}" onclick="return confirm('Are you sure you want to remove this item?')">remove</a>   <br> <br>
+              </div> 
+            </div>
+            </div>
+            </div>
+          </div>
+              {% endfor %}  
+                
             
+        </div> 
                       
 
                       
@@ -31,10 +54,10 @@
             
               
                       
-            </div>
-          </div>
+      </div>
+  </div>
 
-        </section>
+</section>
     
 
 {% endblock %}

@@ -20,15 +20,15 @@ $(document).ready(function () {
             "description": "Thank you for shopping wit us",
             "image": "https://example.com/your_logo",
             "handler": function (response){
-                alert(response.razorpay_payment_id);
+                // alert(response.razorpay_payment_id);
                 data = {
                     "payment_mode":"Paid by Razorpay",
                     "payment_id": response.razorpay_payment_id, 
                     "order_number":order_number,
                     "amount_paid":amount_paid, 
-                    "csrfmiddlewaretoken":token
+                    "csrfmiddlewaretoken":token,
                 }
-
+                console.log(data)
                 $.ajax({
                     type: "POST",
                     url: "/orders/payments/",
@@ -39,7 +39,7 @@ $(document).ready(function () {
                                 responsec.status,
                                 'success'
                             ).then((value) => {
-                            window.location.href = '/orders/payments'+'?order_number='+order_number
+                            window.location.href = '/orders/order_complete'+'?order_number='+order_number
                             console.log(order_number)
 
                           });
@@ -85,7 +85,7 @@ $(document).ready(function () {
             "csrfmiddlewaretoken":token
 
         }
-        
+        console.log(data)
         $.ajax({
             type: "POST",
             url: "/orders/payments/",

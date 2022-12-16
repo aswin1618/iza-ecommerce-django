@@ -79,16 +79,19 @@ class UserProfile(models.Model):
     
 class UserAdress(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE,null=True)
+    phone = models.CharField(max_length=15,null=True)
     adress_line_1 = models.CharField(blank=True,max_length=100)
     adress_line_2 = models.CharField(blank=True,max_length=100)
+    pin_code = models.IntegerField(null=True)
+    district = models.CharField(max_length=20,null=True)
     city = models.CharField(blank=True,max_length=20)
     state = models.CharField(blank=True,max_length=20)
     
 
     def __str__(self):
         return f'{self.adress_line_1} {self.adress_line_2} {self.city} {self.state}'
-        
-
-
+    
+    def snap(self):
+        return f'{self.user}, {self.adress_line_1}, {self.adress_line_2}.....'
 
 

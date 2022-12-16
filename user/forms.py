@@ -61,7 +61,7 @@ class AdressForm(forms.ModelForm):
     
     class Meta:
         model = UserAdress
-        fields = ('adress_line_1','adress_line_2','city','state')     
+        fields = ('phone','adress_line_1','adress_line_2','pin_code','district','city','state')     
    
     def __init__(self, *args, **kwargs):
         super(AdressForm, self).__init__(*args, **kwargs)

@@ -47,7 +47,7 @@
                     <tr class="">
                       <td class="">
                         <div class="product-info">
-                          <img width="190" height="180" src="{{ wishlist_item.product.images.url }}" alt="" />                        
+                          <img width="150" height="150" src="{{ wishlist_item.product.images.url }}" alt="" />                        
                         </div>
                       </td>
                       <td>
@@ -57,9 +57,14 @@
                         <h6>₹{{ wishlist_item.product.price }}</h6> 
                         
                       </td>
+                      
+                      <td>
+                         {% if wishlist_item.product.stock > 0 %}<h4 style="color: darkorange;">In stock </h4>{% else %} <h4 style="color: red;">out of stock </h4>{% endif %}
+                        
+                      </td>
                       <td>
                         <a class="btn btn-danger" href="{% url 'remove_wish_item' wishlist_item.product.id wishlist_item.id %}" onclick="return confirm('Are you sure you want to remove this item?')">remove</a>
-                        <a href="{{ wishlist_item.product.get_url }}" class="btn btn-primary"> <i class="tf-ion-android-cart"></i></a>
+                        {% if wishlist_item.product.stock > 0 %}<a href="{{ wishlist_item.product.get_url }}" class="btn btn-primary"> <i class="tf-ion-android-cart"></i></a> {% endif %}
                       </td>
 
                     </tr> 

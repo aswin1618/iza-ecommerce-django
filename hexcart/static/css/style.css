@@ -82,6 +82,7 @@ iframe {
 
 a:hover {
   size: 100px;
+  text-decoration: none;
 }
 
 a, a:focus {

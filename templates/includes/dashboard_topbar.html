@@ -2,7 +2,7 @@
     <li><a class="{% if '/profile/' == request.path %}active {% endif %}" href="{% url 'dashboard' %}">Dashboard</a></li>
     <li><a class="{% if '/my_orders/' in request.path %}active {% endif %}"href="{% url 'my_orders' %}">My Orders</a></li>
     <li><a class="{% if '/edit_profile/' in request.path %}active {% endif %}"href="{% url 'edit_profile' %}" >Edit Profile</a></li>
-    <li><a class="{% if '/edit_adress/' in request.path %}active {% endif %}"href="{% url 'edit_adress' %}" >My Adresses</a></li>
+    <li><a class="{% if '/user_adress/' in request.path %}active {% endif %}"href="{% url 'user_adress' %}" >My Adresses</a></li>
     <li><a class="{% if '/change_password/' in request.path %}active {% endif %}"href="{% url 'change_password' %}" >Change Password</a></li>
     <li><a href="{% url 'signout' %}"style="background-color: red;
         color: black; 

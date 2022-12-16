@@ -7,7 +7,7 @@
     <div class="container">
         <div class="row">
             <h2 class="text-center" mb-5>Order summary</h2>
-        <div class="col-md-6 col-md-offset-2">
+        <div class="col-md-8 col-md-offset-2 ">
             <div class="block">
                 <div class="card">
                     <div class="card-header">
@@ -16,12 +16,14 @@
                     <div class="card-body">
                       <input type="hidden" class="order_number" order_number="{{order.order_number}}">
                       {% csrf_token %}
-                        <p class="card-text mb-0 name" name="{{ order.full_name }}">{{ order.full_name }} </p>
-                        <p class="card-text mb-0">{{ order.full_adress }} </p>
-                        <p class="card-text mb-0">{{ order.pin_code }} </p>
-                        <p class="card-text mb-0">{{ order.city }},{{ order.state }} </p>
-                        <p class="card-text mb-0 email" email="{{ order.email }}">{{ order.email }} </p>
-                        <p class="card-text mb-0 phone" phone="{{ order.phone }}">{{ order.phone }} </p>                        
+                        <p class="card-text mb-0 name" name="{{ order_adress.user }}">{{ order_adress.user }}</p>
+                        <p class="card-text mb-0">{{ order_adress.phone }} </p>
+                        <p class="card-text mb-0">{{ order_adress.adress_line_1 }} </p>
+                        <p class="card-text mb-0">{{ order_adress.adress_line_2 }} </p>
+                        <p class="card-text mb-0">{{ order_adress.city }}, {{ order_adress.pin_code }} </p>
+                        <p class="card-text mb-0">{{ order_adress.district }}, {{ order_adress.state }} </p>
+                        <p class="card-text mb-0 email" email="{{ order.user }}">{{ order.user }} </p>
+                        <p class="card-text mb-0 phone" phone="{{ order_adress.phone }}">{{ order_adress.phone }} </p>                        
                     </div>
                 </div>
                 <br><br><br>

@@ -1,0 +1,101 @@
+{% extends "manager/managerbase.html" %}
+
+{% block content %}
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-conten padding-y bg" >
+    
+    <div class="container" style= background-color:#F3F2EE;>
+
+        <div class="row">
+        {% include 'includes/manager_dashboard_sidebar.html' %}
+
+        <main class="col-md-9">
+      <h2 class="text-center font-weight-bold text-dark my-5">User Management</h2>
+
+          <div class="col-12 d-flex justify-content-end">
+            <form action="" class="search" method="POST">
+              {% csrf_token %}
+              <div class="mb-3 ">
+                <div class="input-group  ">
+                  <input type="text" id="form1" class="form-control" placeholder = "search" name = "key" />
+                  
+                <button class="btn btn-dark" type="submit">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+              </div>
+            </form>
+          </div>
+            <div class="shopping__cart__table">
+                <table class="table bg-white">
+                    <thead> 
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        {% comment %} <th scope="col">Username</th> {% endcomment %}
+                        <th scope="col">Email Address</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Active</th>
+                        
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                          <th scope="row">{{ user.id }}</th>
+                          <td>{{ user.first_name | capfirst}}</td>
+                          {% comment %} <td>{{ user.username }}</td> {% endcomment %}
+                          <td>{{ user.email }}</td>
+                          <td>{{ user.phone_number }}</td>
+                          <td>
+                            {% if user.is_active %}
+                            <i class="bi bi-check-circle-fill"></i>                
+                            {% else %}
+                            <i class="bi bi-x-circle-fill"></i>
+                            {% endif %}
+                          </td>
+                       
+                          <td>
+                            {% if user.is_active %}
+                            <a href="{% url 'user_block' user.id %}" class="btn btn-warning btn-sm">Block</a>
+                            
+                            {% else %}
+                            <a href="{% url 'user_unblock' user.id %}" class="btn btn-info btn-sm">Unblock</a>
+                            {% endif %}
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody> 
+                  </table>
+                  <div class="container">
+                    <nav class="mt-4" aria-label="Page navigation sample">
+                      {% if users.has_other_pages %}
+                      <ul class="pagination">
+                        {% if users.has_previous %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ users.previous_page_number }}">Previous</a></li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link text-dark" href="#">Previous</a></li>
+                        {% endif %} {% for page_number in users.paginator.page_range %} {% if users.number == page_number %}
+                        <li class="page-item active"><a class="page-link text-dark" href="#">{{ page_number }}</a></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ page_number }}">{{ page_number }}</a></li>
+                        {% endif %} {% endfor %} {% if users.has_next %}
+                        <li class="page-item"><a class="page-link text-dark" href="?page={{ users.next_page_number }}">Next</a></li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link text-dark" href="#">Next</a></li>
+                        {% endif %}
+                      </ul>
+                      {% endif %}
+                    </nav>
+                  </div>
+
+              </div>
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+    {% endblock content %}

@@ -64,23 +64,28 @@
 				</div> <!-- filter-group .// -->
 
 				<div class="filter-group">
-					<h3> shop by brands</h3>
-					<div class="filter-content collapse show" id="collapse_4" >
-						<div class="card-body">
+					<header class="panel-header">
+					<a href="#1" data-toggle="collapse"><h4> shop by brands <i class="bi bi-caret-down"></i></h4> </a>
+					<div class="filter-content" >
+						<div class="panel-body">
+							<div id="1" class="collapse">
 						{% for prod in products %}
 						  <label class="checkbox-btn">
 							<input type="checkbox">
 							<span class="btn btn-light" > {{ prod.brand }} </span>
 						  </label>
 						{% endfor %}
-					</div><!-- card-body.// -->
+					</div>
+				</div><!-- card-body.// -->
 					</div>
 				</div> <!-- filter-group .// -->
 
 				<div class="filter-group">
-					<h3> filter by price</h3>
-					<div class="filter-content collapse show" id="collapse_4" >
-						<div class="card-body">
+					<header class="panel-header">
+					<a href="#2" data-toggle="collapse"><h4> filter by price <i class="bi bi-caret-down"></i></h4></a>
+					<div class="filter-content">
+						<div class="panel-body">
+							<div id="2" class="collapse">
 						  <label class="checkbox-btn">
 							<input type="checkbox">
 							<span class="btn btn-light" > under ₹1500  </span>
@@ -93,20 +98,20 @@
 							<input type="checkbox">
 							<span class="btn btn-light" > ₹3000 above </span>
 						  </label>
-
+						</div>
 					</div><!-- card-body.// -->
 					</div>
 				</div> <!-- filter-group .// -->
 
 				<div class="filter-group">
-					<header class="card-header">
-						<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
-							<i class="icon-control fa fa-chevron-down" style="margin-top: 5px; float: right; font-size: 80%;" ></i>
-							<h6 class="title">Sizes </h6>
+					<header class="panel-header">
+						<a href="#3" data-toggle="collapse">
+							<h4>Sizes  <i class="bi bi-caret-down"></i> </h4></a>
 						</a>
 					</header>
-					<div class="filter-content collapse show" id="collapse_4" style="">
-						<div class="card-body">
+					<div class="filter-content">
+						<div class="panel-body">
+							<div id="2" class="collapse">
 						  <label class="checkbox-btn">
 							<input type="checkbox">
 							<span class="btn btn-light" > XS </span>
@@ -126,10 +131,10 @@
 							<input type="checkbox">
 							<span class="btn btn-light"> XXL </span>
 						  </label>
+						</div>
 					</div><!-- card-body.// -->
 					</div>
-					<button class="btn btn-block btn-primary">Apply</button>
-					<button class="btn btn-block btn-default">reset</button>
+					<button class="btn btn-block btn-main">Apply</button>
 				</div> <!-- filter-group .// -->
 			</aside>
 			<div class="col-md-9">
@@ -199,45 +204,5 @@
 		</ul>
 		{% endif %}
 	</nav>
-
-
-
-
-    <!-- 
-    Essential Scripts
-    =====================================-->
-    
-    <!-- Main jQuery -->
-    <script src="plugins/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap 3.1 -->
-    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Bootstrap Touchpin -->
-    <script src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-    <!-- Instagram Feed Js -->
-    <script src="plugins/instafeed/instafeed.min.js"></script>
-    <!-- Video Lightbox Plugin -->
-    <script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-    <!-- Count Down Js -->
-    <script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
-
-    <!-- slick Carousel -->
-    <script src="plugins/slick/slick.min.js"></script>
-    <script src="plugins/slick/slick-animation.min.js"></script>
-
-    <!-- Google Mapl -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
-    <script type="text/javascript" src="plugins/google-map/gmap.js"></script>
-
-    <!-- Main Js File -->
-    <script src="js/script.js"></script>
-    
-
-
-  </body>
-  </html>
-
-
-
-
 
 {% endblock %}

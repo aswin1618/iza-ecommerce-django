@@ -22,6 +22,7 @@
                       
 
                       <div class="card-body">
+                        {% include 'includes/alerts.html' %}
                         <div class="row">
                           <div class="col-sm-12">
                             <table class="table table-hover">
@@ -31,19 +32,30 @@
                                     <th scope="col">Billing name</th>
                                     <th scope="col">Phone Number</th>
                                     <th scope="col">Order total</th>
-                                    <th scope="col">Order date</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col"> date</th>
+                                    <th scope="col">Cancel</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                  {% for order in orders %}
-                                  <tr>
-                                    <th scope="row">{{ order.order_number }}</th>
-                                    <td>{{ order.first_name }}</td>
-                                    <td>{{ order.phone }}</td>
-                                    <td>{{ order.order_total }}</td>
-                                    <td>{{ order.created_at }}</td>
-                                  </tr>
-                                {% endfor %}
+                                 <tr>
+                                   <th scope="row"><a href="{% url 'order_detail' order.order_number %}">{{order.order_number}}</a>
+                                   </th>
+                                   <td>{{order.user.first_name}}</td>
+                                   <td>{{order.order_adress.phone}}</td>
+                                   <td>₹ {{order.order_total}}</td>
+                                   <td>{{ order.status }}</td>
+                                   <td>{{order.created_at}}</td>
+                                   {% if order.status != 'Cancelled' %}
+                                   <td><a href="{% url 'cancel_order' order.order_number %}"><button
+                                         class="btn btn-sm btn-dark">Cancel</button></a></td>
+                                         {% else %}
+                                         <td>Cancelled</td>
+                                       {% endif %}
+             
+                                 </tr>
+                                 {% endfor %}
                                 </tbody>
                               </table>    
                             

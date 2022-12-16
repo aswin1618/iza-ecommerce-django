@@ -1,0 +1,55 @@
+{% extends "manager/managerbase.html" %}
+
+{% block content %}
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-conten padding-y bg">
+    
+    <div class="container mb-5" style= background-color:#F3F2EE;>
+        <div class="row">
+        {% include 'includes/manager_dashboard_sidebar.html' %}
+
+            <main class="col-md-9 "> 
+              <h2 class="text-center font-weight-bold text-dark my-5">Category Management</h2>
+
+            <div class="row d-flex flex-row-reverse">
+          <a href="{% url 'add_category' %}" class="btn btn-dark m-3 col-2 ">Add New</a>
+        </div>
+            <div class="row shopping__cart__table">
+                <table class="table bg-white">
+                    <thead>
+                      <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">Category Name</th>
+                        <th scope="col">Category Slug</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Delete</th>
+                        
+                        
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                        <tr>
+                          <th scope="row">{{ category.id }}</th>
+                          <td>{{ category.category_name }}</td>
+                          <td>{{ category.slug }}</td>
+                          <td><a href="{% url 'update_category' category.id %}" class= "btn-sm btn-warning">Update</a></td>
+                          <td><a href="{% url 'delete_category' category.id %}" class= "btn btn-danger btn-sm">Delete</a></td>
+                         
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+                
+
+              </div>
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock content %}

@@ -1,6 +1,6 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from carts.models import CartItem
-from .forms import OrderForm
+# from .forms import OrderForm
 from .models import Order,Payment,OrderProduct
 import razorpay
 from django.conf import settings
@@ -11,6 +11,7 @@ import datetime
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
+from user.models import UserAdress,UserProfile
 
 
 razorpay_client = razorpay.Client(
@@ -38,6 +39,7 @@ def payments(request):
     print('asfsadfasdfdsfadsfasdf',order_number )
     
     order = Order.objects.get(user=request.user, order_number=order_number)
+
     order.payment = payment
     order.is_ordered = True
     order.status ='Accepted' 
@@ -111,7 +113,6 @@ def order_complete(request):
     context = {
         'order':order,
         'ordered_products':ordered_products,
-
         'total_amount':total_amount,
     }
     return render(request, 'orders/payment_complete.html', context)
@@ -136,54 +137,54 @@ def place_order(request, total=0, quantity=0):
         quantity += cart_item.quantity
     
     if request.method == 'POST':
-        form = OrderForm(request.POST)  
-        if form.is_valid():
+        
+        #getting payment mode 
+        payment_mode = request.POST['payment_method']
+        
+        #getting the adress selected
+        adress_id = request.POST['order_adress']
+        userprofile = get_object_or_404(UserProfile ,user=request.user)
+        order_adress = UserAdress.objects.get(user=userprofile, id=adress_id)
+
+         #generate order number
             
-            #store all the billing information in the table
-            data = Order()
-            data.user = current_user
-            data.first_name = form.cleaned_data['first_name']
-            data.last_name = form.cleaned_data['last_name']
-            data.phone = form.cleaned_data['phone']
-            data.email = form.cleaned_data['email']
-            data.adress_line_1 = form.cleaned_data['adress_line_1']
-            data.adress_line_2 = form.cleaned_data['adress_line_2']
-            data.pin_code = form.cleaned_data['pin_code']
-            data.state = form.cleaned_data['state']
-            data.city = form.cleaned_data['city']
-            data.order_total = total
-            data.ip = request.META.get('REMOTE_ADDR')
+        yr = int(datetime.date.today().strftime('%y'))
+        dt = int(datetime.date.today().strftime('%d'))
+        mt = int(datetime.date.today().strftime('%m'))
+        d = datetime.date(yr,mt,dt)
+        current_date = d.strftime("%y%m%d")
             
-            data.save()
+        
+        
             
-            
-            #generate order number
-            
-            yr = int(datetime.date.today().strftime('%y'))
-            dt = int(datetime.date.today().strftime('%d'))
-            mt = int(datetime.date.today().strftime('%m'))
-            d = datetime.date(yr,mt,dt)
-            current_date = d.strftime("%y%m%d")
-            
-            order_number = current_date + str(data.id)
-            
-            data.order_number = order_number
-            
-            data.save()
+        data = Order()
+        data.user = current_user
+        data.order_total = total
+        data.ip = request.META.get('REMOTE_ADDR')
+        data.save()
+        
+        
+        order_number = current_date + str(data.id)
+        data.order_number = order_number
+        data.order_adress = order_adress
+        data.payment_method = payment_mode
+        data.save()
             
             
-            order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
+        order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             
-            payment_mode = request.POST['payment_method']
             
-            context = {
+            
+        context = {
                 'order': order,
                 'cart_items': cart_items,
                 'total' : total,
                 'payment_mode':payment_mode,
+                'order_adress' :order_adress,
             }
-            return render(request,'orders/payments.html',context)
+        return render(request,'orders/payments.html',context)
     
     else:
         return redirect('checkout')
-        
+
+

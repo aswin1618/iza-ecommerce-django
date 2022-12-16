@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .forms import RegistrationForm ,UserForm,UserProfileForm,AdressForm
-from .models import Account,UserProfile
+from .models import Account,UserProfile,UserAdress
 from django.contrib import messages,auth
 from django.contrib.auth.decorators import login_required
 from carts.models import Cart,CartItem
@@ -16,7 +16,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 
 
-from orders.models import Order
+from orders.models import Order,OrderProduct
 # Create your views here.
 
 
@@ -230,6 +230,32 @@ def my_orders(request):
     }
     return render(request,'accounts/my_order.html',context)
 
+@login_required(login_url='signin')
+def cancel_order(request, order_number):
+    order = Order.objects.get(order_number=order_number)
+    if order.status =='Accepted':
+        order.status = 'Cancelled'
+        order.save()
+    else:
+        messages.error(request,'you cannot cancel now')
+    return redirect('my_orders')
+
+
+# user order details
+@login_required(login_url='signin')
+def order_detail(request, order_id):
+    print(order_id)
+    order = Order.objects.get(order_number=order_id)
+    ordered_products = OrderProduct.objects.filter(order=order)
+    total_amount = 0
+    for item in ordered_products:
+        total_amount += (item.product_price * item.quantity)
+    context = {
+        'order':order,
+        'ordered_products':ordered_products,
+        'total_amount':total_amount,
+    }
+    return render(request, 'accounts/order_detail.html', context)
 
 @login_required(login_url='signin')
 def edit_profile(request):
@@ -258,30 +284,80 @@ def edit_profile(request):
     
     return render(request,'accounts/edit_profile.html',context)
 
+@login_required(login_url='signin')
+def user_adress(request):
+    userprofile = get_object_or_404(UserProfile ,user=request.user)
+    adress_list = UserAdress.objects.filter(user=userprofile)
+    
+    context = {
+        'adress_list': adress_list,
+    }
+    
+    return render(request,'accounts/adresses.html',context)
+
 
 @login_required(login_url='signin')
-def edit_adress(request):
+def add_adress(request):
     userprofile = get_object_or_404(UserProfile ,user=request.user)
-    
     if request.method == 'POST':
-        adress_form = AdressForm(request.POST, instance=request.user)
+        form = AdressForm(request.POST)
+        if form.is_valid():
+            phone = form.cleaned_data['phone']
+            adress_line_1 = form.cleaned_data['adress_line_1']
+            adress_line_2 = form.cleaned_data['adress_line_2']
+            pin_code = form.cleaned_data['pin_code']
+            district = form.cleaned_data['district']
+            city = form.cleaned_data['city']
+            state = form.cleaned_data['state']
+        adress = UserAdress()
+        adress.user= userprofile
+        adress.phone = phone
+        adress.adress_line_1 = adress_line_1
+        adress.adress_line_2 = adress_line_2
+        adress.pin_code = pin_code
+        adress.district = district
+        adress.city = city
+        adress.state = state
+        adress.save()
+        return redirect('user_adress')
+    else:
+        form = AdressForm()
+        return render(request,'accounts/add_adress.html',{"form": form})
+
+    
+    
+@login_required(login_url='signin')
+def edit_adress(request, adress_id):
+    userprofile = get_object_or_404(UserProfile ,user=request.user)
+    adress = UserAdress.objects.get(user= userprofile, id=adress_id)
+    
+    if request.method == 'POST': 
+        adress_form = AdressForm(request.POST, user=request.user, instance=adress)
         if adress_form.is_valid():
             adress_form.save()
             messages.success(request,'your adress has been updated')
             return redirect('edit_adress')
-        
-        
+     
     else:
-        user_form = UserForm(instance=request.user)
-        profile_form = UserProfileForm(instance= userprofile)
+        adress_form = AdressForm(instance= userprofile,id=adress_id)
             
     context = {
-        'user_form' :user_form,
-        'profile_form' :profile_form,
-        'userprofile' :userprofile
+        'adress_form' :adress_form,
     }
     
-    return render(request,'accounts/adresses.html',context)
+    return render(request,'accounts/edit_adress.html',context)
+
+
+@login_required(login_url='signin')
+def remove_adress(request,adress_id):
+    userprofile = get_object_or_404(UserProfile ,user=request.user)
+    adress = UserAdress.objects.get(user= userprofile,id=adress_id)
+    
+    adress.delete()
+    messages.warning(request,'adress has been deleted')
+    return redirect('user_adress')
+
+
 
 @login_required(login_url='signin')
 def change_password(request):

@@ -4,6 +4,8 @@ from .models import Cart , CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
+from user.models import UserAdress,UserProfile
+
 # Create your views here.
 
 def _cart_id(request):
@@ -200,11 +202,14 @@ def checkout(request, total=0, quantity=0, cart_items=None):
                quantity += cart_item.quantity
      except ObjectDoesNotExist:
           pass
-
+     userprofile = get_object_or_404(UserProfile ,user=request.user)
+     adress_list = UserAdress.objects.filter(user=userprofile)
+     
      context = {
           'total' : total,
           'quantity' : quantity,
-          'cart_items' : cart_items
+          'cart_items' : cart_items,
+          'adress_list': adress_list
      }
 
      return render (request,'checkout.html',context)

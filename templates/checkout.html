@@ -28,49 +28,31 @@
                   <h4 class="widget-title">Billing Details</h4>
                   <form class="checkout-form" action="{% url 'place_order' %}" method="POST">
                      {% csrf_token %}
-                     <div class="checkout-country-code clearfix">
-                        <div class="form-group">
-                           <label for="">First Name</label>
-                           <input type="text" class="form-control" id="full_name" placeholder="" name="first_name" required>
-                        </div>
-                        <div class="form-group">
-                           <label for="">Last Name</label>
-                           <input type="text" class="form-control" id="full_name" placeholder=""name="last_name" required>
-                        </div>
-                     </div>
-                     <div class="form-group">
-                        <label for="">email</label>
-                        <input type="email" class="form-control" id="email" placeholder=""name="email" required>
-                     </div>
+                  <h4 class="card-title my-4">Select Adress</h4>
 
-                     <div class="form-group">
-                        <label for="">Address line 1</label>
-                        <input type="text" class="form-control" id="user_address" placeholder="" name="adress_line_1" required>
-                     </div>
-                     <div class="form-group">
-                        <label for="">Address line 2</label>
-                        <input type="text" class="form-control" id="user_address" placeholder="" name="adress_line_2" >
-                     </div>
-                     <div class="checkout-country-code clearfix">
-                        <div class="form-group">
-                           <label for="">PINcode</label>
-                           <input type="text" class="form-control" id="full_name" placeholder="" name="pin_code" required>
-                        </div>
-                        <div class="form-group">
-                           <label for="">Phone Number</label>
-                           <input type="text" class="form-control" id="full_name" placeholder="" name="phone" required>
-                        </div>
-                     </div>
-                     <div class="checkout-country-code clearfix">
-                        <div class="form-group">
-                           <label for="">City</label>
-                           <input type="text" class="form-control" id="user_address" placeholder="" name="city" required>
-                        </div>
-                        <div class="form-group">
-                           <label for="">State</label>
-                           <input type="text" class="form-control" id="user_address" placeholder="" name="state"  required>
-                        </div>
-                     </div>
+                     {% for adress in adress_list %} 
+                     <input type="radio" id="{{adress.id}}" name="order_adress" value="{{adress.id}}" required>
+                     <label for="{{adress.id}}"></label>
+                           <div class="row">
+                              <div class="col-md-8 col-md-offset-1">
+                           <div class="panel panel-default">
+                              <div class="panel-heading">
+                                 <a data-toggle="collapse" href="#collapse1">{{ adress.snap}}</a>
+                              </div>
+                              <div id="collapse1" class="panel-collapse collapse">
+                                 <div class="panel-body">{{ adress.user}} <br>{{ adress.phone}} <br>
+                                    {{ adress.adress_line_1}} <br>
+                                    {{ adress.adress_line_2}} <br>
+                                    {{ adress.pin_code}} <br>
+                                    {{ adress.district}} <br> {{ adress.city}}<br>{{ adress.state}}
+                                 </div>
+                              </div>
+                              </div>
+                              </div>
+                           </div>
+                        
+                      {% endfor %}  
+                     
                   
                </div>
                <div class="well">

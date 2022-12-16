@@ -9,6 +9,7 @@ class Product(models.Model):
     brand        = models.CharField(max_length=100 ,default=None)
     description  = models.TextField(max_length = 500 ,blank = True)
     price        = models.IntegerField()
+    stock        = models.IntegerField(default=0)
     images       = models.ImageField(upload_to ='photos/products')
     is_available = models.BooleanField(default = True)
     category     = models.ForeignKey(Category,on_delete=models.CASCADE)
@@ -23,8 +24,7 @@ class Product(models.Model):
         return reverse('product_detail',args=[self.category.slug,self.SubCategory.slug,self.slug])
 
     def __str__(self):
-        return self.brand +"   " +str(self.category) + " " +self.product_name   
-
+        return self.product_name
 
 
 color_choice=(

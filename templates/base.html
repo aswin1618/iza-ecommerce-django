@@ -88,13 +88,9 @@
     {% comment %} <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> {% endcomment %}
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="{% static 'js/checkout.js' %}"></script>
-    
-
-    
-
-    
+    {% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="{% static 'js/checkout.js' %}"></script> {% endcomment %}
+       
 {% block script %}
 
 {% endblock %}

@@ -53,6 +53,14 @@ def register(request):
             send_email.send()
             
             #messages.success(request,'Thank you for registering with us. We have sent a verification email, please verify to continue shopping with us')
+            
+            
+            
+            #creating userprofile and useradress
+            userprofile = UserProfile()
+            userprofile.user = user
+            userprofile.save()
+            
             return redirect('/profile/signin/?command=verification&email='+email)
     else:
         form = RegistrationForm()

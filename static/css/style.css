@@ -80,7 +80,12 @@ iframe {
   border: 0;
 }
 
-a, a:focus, a:hover {
+a:hover {
+  size: 100px;
+  text-decoration: none;
+}
+
+a, a:focus {
   text-decoration: none;
   outline: 0;
   color: #000;

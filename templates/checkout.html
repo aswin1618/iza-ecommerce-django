@@ -29,7 +29,7 @@
                   <form class="checkout-form" action="{% url 'place_order' %}" method="POST">
                      {% csrf_token %}
                   <h4 class="card-title my-4">Select Adress</h4>
-
+                     <a class="btn btn-info" href="{% url 'add_adress' %}" > add new address +</a>  <br><br>
                      {% for adress in adress_list %} 
                      <input type="radio" id="{{adress.id}}" name="order_adress" value="{{adress.id}}" required>
                      <label for="{{adress.id}}"></label>
@@ -39,7 +39,7 @@
                               <div class="panel-heading">
                                  <a data-toggle="collapse" href="#collapse1">{{ adress.snap}}</a>
                               </div>
-                              <div id="collapse1" class="panel-collapse collapse">
+                              <div id="collapse1" class="panel-collapse collapse in">
                                  <div class="panel-body">{{ adress.user}} <br>{{ adress.phone}} <br>
                                     {{ adress.adress_line_1}} <br>
                                     {{ adress.adress_line_2}} <br>
@@ -81,16 +81,16 @@
            
                  {%else%}
                  <div class="row">
-                   <div class="col-md-8 col-md-offset-2">
+                   <div class="col-md-12 col-md-offset-2">
                      <div class="block">
                        <div class="product-list">
-                           <table class="table">
+                           <table class="table" style="border-spacing: 40px;">
                              <thead>
                                <tr>
-                                 <th class=""> </th>
-                                 <th class="">Item name</th>
-                                 <th class="">Item count</th>
-                                 <th class="">Item Price</th>
+                                 <th style="width:70%"> </th>
+                                 <th scope="col">Item name</th>
+                                 <th scope="col">Item count</th>
+                                 <th scope="col">Item Price</th>
                                </tr>
                              </thead>
                              <tbody>
@@ -150,37 +150,6 @@
    </div>
 </div>
 
-    <!-- 
-    Essential Scripts
-    =====================================-->
-    
-    <!-- Main jQuery -->
-    <script src="plugins/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap 3.1 -->
-    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Bootstrap Touchpin -->
-    <script src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-    <!-- Instagram Feed Js -->
-    <script src="plugins/instafeed/instafeed.min.js"></script>
-    <!-- Video Lightbox Plugin -->
-    <script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-    <!-- Count Down Js -->
-    <script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
-
-    <!-- slick Carousel -->
-    <script src="plugins/slick/slick.min.js"></script>
-    <script src="plugins/slick/slick-animation.min.js"></script>
-
-    <!-- Google Mapl -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
-    <script type="text/javascript" src="plugins/google-map/gmap.js"></script>
-
-    <!-- Main Js File -->
-    <script src="js/script.js"></script>
-    
-
-
-  </body>
-  </html>
+   
 
 {% endblock %}

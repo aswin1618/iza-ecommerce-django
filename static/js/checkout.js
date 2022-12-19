@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    // payment with razorpay
+    //razorpay
     $('.payWithRazorpay').click(function (e) { 
         e.preventDefault();
 
@@ -9,16 +9,16 @@ $(document).ready(function () {
         var phone =$('.phone').attr('phone');
         var order_number =$('.order_number').attr('order_number');
         var token = $("[name='csrfmiddlewaretoken']").val();
+        console.log(order_number);
        
         
         var options = {
-            "key": "rzp_test_nCGq2eKcFYga3A", // Enter the Key ID generated from the Dashboard
-            "amount": "100", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "key": "rzp_test_nCGq2eKcFYga3A",
+            "amount": "100", 
             "currency": "INR",
             "name": "IZA",
             "description": "Thank you for shopping wit us",
             "image": "https://example.com/your_logo",
-            // "order_id": order_number, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response){
                 // alert(response.razorpay_payment_id);
                 data = {
@@ -26,9 +26,26 @@ $(document).ready(function () {
                     "payment_id": response.razorpay_payment_id, 
                     "order_number":order_number,
                     "amount_paid":amount_paid, 
-                    "csrfmiddlewaretoken":token
+                    "csrfmiddlewaretoken":token,
                 }
-               
+                console.log(data)
+                $.ajax({
+                    type: "POST",
+                    url: "/orders/payments/",
+                    data: data,
+                    success: function (responsec) {
+                        Swal.fire(
+                                'Congratulations!',
+                                responsec.status,
+                                'success'
+                            ).then((value) => {
+                            window.location.href = '/orders/order_complete'+'?order_number='+order_number
+                            console.log(order_number)
+
+                          });
+
+                    }
+                });
                 
             },
             "prefill": {
@@ -47,6 +64,9 @@ $(document).ready(function () {
         rzp1.open();
     });// end of razorpay payment
 
+
+
+
     //cash on delivery
     $('.cod').click(function (e) { 
         e.preventDefault();
@@ -55,7 +75,7 @@ $(document).ready(function () {
         var token = $("[name='csrfmiddlewaretoken']").val();
         console.log(order_number)
 
-
+        console.log('this is something', amount_paid);
         //ajax start
         data = {
             "payment_mode":"Cash on delivery", 
@@ -65,7 +85,24 @@ $(document).ready(function () {
             "csrfmiddlewaretoken":token
 
         }
-       
+        console.log(data)
+        $.ajax({
+            type: "POST",
+            url: "/orders/payments/",
+            data: data,
+            success: function (responsec) {
+                Swal.fire(
+                    'Congratulations!',
+                    responsec.status,
+                    'success'
+                ).then((value) => {
+                    window.location.href = '/orders/order_complete'+'?order_number='+order_number
+                    console.log(order_number)
+
+                  });
+
+            }
+        });
 
 
 

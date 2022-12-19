@@ -6,16 +6,22 @@ from django.contrib import messages
 
 # Create your views here.
 def wishlist(request, quantity=0, wishlist_items=None):
-    
-        wishlist_items = Wishlist.objects.filter(user=request.user, is_active=True)
-    
-        context = {
-            'wishlist_items' : wishlist_items
-        }
 
+        
+        if request.user.is_authenticated:
+            print(request.user)
+            wishlist_items = Wishlist.objects.filter(user=request.user, is_active=True)
+        
+            context = {
+                'wishlist_items' : wishlist_items
+            }
 
-        return render(request,'wishlist.html',context)
-    
+            return render(request,'wishlist.html',context)
+            
+        else:
+            messages.error(request,'you need to sign in first')
+            return redirect('signin')
+                
 def add_wish(request,product_id):
     current_user = request.user
     product = Product.objects.get(id=product_id)  #get the product

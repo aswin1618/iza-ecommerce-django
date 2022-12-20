@@ -119,9 +119,14 @@ def signin(request):
                                 item.save()
             except:
                 pass
+            
             auth.login(request, user)
-            messages.success(request,'you are logged in')
-            return redirect('home')
+            
+            if user.is_superadmin == True   :
+                return redirect('manager_dashboard')
+            else:
+                messages.success(request,'you are logged in')
+                return redirect('home')
         else:
             messages.error(request,'invalid credentials')
             return redirect('signin')            

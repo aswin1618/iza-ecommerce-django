@@ -90,7 +90,12 @@
 					</li><!-- / Search --> {% endcomment %}
 				</ul><!-- / .nav .navbar-nav .navbar-right -->
 			</div>
-
+            <div class="pull-right text-right" style="display: inline-block;">
+              <h5><a href=""> view site</a> </h5>
+              <h5><i class="bi bi-person-lines-fill"></i>{{ user.first_name }}</h5>
+              <a class="btn btn-warning btn-block" href="{% url 'signout' %}"> <i class="fa fa-power-off"></i> <span 
+                class="text">Log out</span> </a>
+            </div>
 		</div>
 	</div>
 </section><!-- End Top Header Bar -->

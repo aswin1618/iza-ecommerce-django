@@ -105,18 +105,31 @@ def product_management(request):
   return render(request, 'manager/product_management.html', context)
 
 
+import re
+
+def slugify(s):
+  s = s.lower().strip()
+  s = re.sub(r'[^\w\s-]', '', s)
+  s = re.sub(r'[\s_-]+', '-', s)
+  s = re.sub(r'^-+|-+$', '', s)
+  return s
+
 # Add Product
 @never_cache
 @login_required(login_url='signin')
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_product(request):
   if request.method == 'POST':
-    print("hoi")
+    
     form = ProductForm(request.POST, request.FILES)
-    print("pooi")
+    
     if form.is_valid():
-      print("hai")
+      product_name= form.cleaned_data['product_name']
+      brand= form.cleaned_data['brand']
       form.save()
+      product =Product.objects.get(product_name=product_name) 
+      product.slug=slugify(brand)+"-"+slugify(product_name)
+      product.save()
       return redirect('product_management')
     else:
       print(form.errors)
@@ -186,9 +199,13 @@ def category_management(request):
 @user_passes_test(lambda u: u.is_admin, login_url='index')
 def add_category(request):
   if request.method == 'POST':
-    form = CategoryForm(request.POST)
+    form = CategoryForm(request.POST,request.FILES)
     if form.is_valid():
+        category_name = form.cleaned_data['category_name']
         form.save()
+        category = Category.objects.get(category_name=category_name)
+        category.slug = slugify(category_name)
+        category.save()
         return redirect('category_management')
 
     else:
@@ -221,7 +238,7 @@ def update_category(request, category_id):
   
   if request.method == 'POST':
     try:
-      form = CategoryForm(request.POST, instance=category)
+      form = CategoryForm(request.POST, request.FILES,instance=category)
       if form.is_valid():
         form.save()
         return redirect('category_management')
@@ -256,7 +273,12 @@ def add_sub_category(request):
   if request.method == 'POST':
     form = SubCategoryForm(request.POST)
     if form.is_valid():
+        category_name = form.cleaned_data['category_name']
+        subcategory_name = form.cleaned_data['subcat_name']
         form.save()
+        subcategory = SubCategory.objects.get(subcat_name=subcategory_name)
+        subcategory.slug = str(category_name)+"-"+slugify(subcategory_name)
+        subcategory.save()
         return redirect('sub_category_management')
   else:
     form = SubCategoryForm()

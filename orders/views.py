@@ -14,6 +14,13 @@ from django.template.loader import render_to_string
 from user.models import UserAdress,UserProfile
 
 
+#invoice download
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.views import View
+from xhtml2pdf import pisa
+
 razorpay_client = razorpay.Client(
     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
@@ -192,3 +199,41 @@ def place_order(request, total=0, quantity=0):
         return redirect('checkout')
 
 
+
+
+def render_to_pdf(template_src, context_dict={}):
+	template = get_template(template_src)
+	html  = template.render(context_dict)
+	result = BytesIO()
+	pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+	if not pdf.err:
+		return HttpResponse(result.getvalue(), content_type='application/pdf')
+	return None
+
+#Automaticly downloads to PDF file
+class DownloadPDF(View):
+	def get(self, request,order_id, *args, **kwargs):
+            
+            order = Order.objects.get(user=request.user, order_number=order_id)
+            print(order_id)
+            ordered_products = OrderProduct.objects.filter(order=order)
+            adress = order.order_adress        
+            data = {
+               'order_id': order_id,
+                'transaction_id': order.payment.payment_id,
+                'user_email': order.user.email,
+                'date': order.created_at,
+                'name': order.user.first_name,
+                'order':order,
+                'ordered_products': ordered_products,
+                'amount': order.order_total,
+                'adress':adress,
+                }
+    
+            pdf = render_to_pdf('orders/invoice.html', data)
+
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "Invoice_%s.pdf" %("12341231")
+            content = "attachment; filename='%s'" %(filename)
+            response['Content-Disposition'] = content
+            return response

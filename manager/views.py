@@ -325,13 +325,14 @@ def delete_sub_category(request, sub_cat_id):
 def order_management(request):
   if request.method =="POST":
     key = request.POST['key']
-    orders = Order.objects.filter(Q(is_ordered=True), Q(order_number__icontains=key) | Q(user__email__icontains=key) | Q(first_name__startswith=key)).order_by('-id')
+    orders = Order.objects.filter(Q(is_ordered=True), Q(order_number__icontains=key) | Q(user__email__icontains=key) | Q(user__first_name__icontains= key)).order_by('-id')
   else:
     orders = Order.objects.filter(is_ordered=True).order_by('-id')
-    
 
+  user_order =Order.objects.filter(is_ordered =True).distinct('user')
   context = {
-    'orders': orders
+    'orders': orders,
+    'user_order' :user_order,
   }
   return render(request, 'manager/order_management.html', context)
 

@@ -4,19 +4,23 @@
     <!--   SIDEBAR   -->
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <a class="list-group-item {% if '/manager_dashboard/' in request.path %}active{% endif %}" href="{% url 'manager_dashboard' %}"> Dashboard </a>
-            <a class="list-group-item {% if '/user_management/' in request.path %}active{% endif %} " href="{% url 'user_management' %}"> User Management </a>
-            <a class="list-group-item {% if '/product_management/' in request.path %}active{% endif %} card  mb-1 " href="{% url 'product_management' %}"> Product Management </a>
-            <a class="list-group-item {% if '/category_management/' in request.path %}active{% endif %} card  mb-1 " href="{% url 'category_management' %}"> Category Management </a>
-            <a class="list-group-item {% if '/sub_category_management/' in request.path %}active{% endif %} card  mb-1 " href="{% url 'sub_category_management' %}"> Subcategory Management</a>
-            <a class="list-group-item {% if '/order_management/' in request.path %}active{% endif %} card  mb-1 " href="{% url 'order_management' %}"> Order Management </a>
-            <a class="list-group-item {% if '/variation_management/' in request.path %}active{% endif %} card  mb-1 " href="{% url 'variation_management' %}"> Variation Management </a>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+					aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+      <div class="collapse navbar-collapse" id="navbar">
+        <ul class="nav navbar-nav">
+          <br>
+            <a  {% if '/manager_dashboard/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %} href="{% url 'manager_dashboard' %}"> Manager Dashboard </a>
+            <a  {% if '/user_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}  href="{% url 'user_management' %}"> User Management </a>
+            <a  {% if '/product_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}   href="{% url 'product_management' %}"> Product Management </a>
+            <a  {% if '/category_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}  href="{% url 'category_management' %}"> Category Management </a>
+            <a  {% if '/sub_category_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}   href="{% url 'sub_category_management' %}"> Subcategory Management</a>
+            <a  {% if '/order_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}  href="{% url 'order_management' %}"> Order Management </a>
+            <a  {% if '/variation_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item" {% endif %} href="{% url 'variation_management' %}"> Variation Management </a>
             {% comment %}<a class="list-group-item {% if '/admin_change_password/' in request.path %}active{% endif %} card  mb-1 " href="{% url 'admin_change_password' %}"> Change Password </a> 
              {% endcomment %}
              

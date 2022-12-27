@@ -94,4 +94,4 @@ class UserAdress(models.Model):
     def snap(self):
         return f'{self.user}, {self.adress_line_1}, {self.adress_line_2}.....'
 
-
+   

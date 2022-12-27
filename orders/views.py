@@ -33,7 +33,6 @@ def payments(request):
         payment.payment_id = request.POST.get('payment_id') 
     payment.payment_method = request.POST.get('payment_mode')
     payment.amount_paid = request.POST.get('amount_paid') 
-    print('asfsadfasdfdsfadsfasdf', payment.amount_paid)
     payment.status=True
     payment.save()
 
@@ -43,7 +42,6 @@ def payments(request):
     # if request.POST.get('payment_id'):
     #     razorpay_client.payment.capture(payment_id, amount_paid)
     order_number = request.POST.get('order_number')
-    print('asfsadfasdfdsfadsfasdf',order_number )
     
     order = Order.objects.get(user=request.user, order_number=order_number)
 
@@ -120,6 +118,10 @@ def order_complete(request):
     order = Order.objects.get(user=request.user, order_number=order_number)
     ordered_products = OrderProduct.objects.filter(order=order)
     total_amount = 0
+    for item in ordered_products:
+        total_amount += (item.product_price * item.quantity)
+    if total_amount < 2000:
+        total_amount = total_amount+50
     
     context = {
         'order':order,
@@ -146,7 +148,13 @@ def place_order(request, total=0, quantity=0):
     for cart_item in cart_items:
         total += (cart_item.product.price * cart_item.quantity)
         quantity += cart_item.quantity
-    
+        
+    delivery = 50
+    if total < 2000 :
+          final_total = total + delivery
+    else:
+          final_total = total
+          
     if request.method == 'POST':
         
         #getting payment mode 
@@ -170,7 +178,7 @@ def place_order(request, total=0, quantity=0):
             
         data = Order()
         data.user = current_user
-        data.order_total = total
+        data.order_total = final_total
         data.ip = request.META.get('REMOTE_ADDR')
         data.save()
         
@@ -184,12 +192,12 @@ def place_order(request, total=0, quantity=0):
             
         order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             
-            
+          
             
         context = {
                 'order': order,
                 'cart_items': cart_items,
-                'total' : total,
+                'total' : final_total,
                 'payment_mode':payment_mode,
                 'order_adress' :order_adress,
             }

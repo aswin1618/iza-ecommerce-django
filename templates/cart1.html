@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% load static%}
+
+{% block content %}
+
+<section class="page-header">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="content">
+					<h1 class="page-name">Cart</h1>
+					<ol class="breadcrumb">
+						<li><a href="index.html">Home</a></li>
+						<li class="active">cart</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+
+<div class="page-wrapper">
+  <div class="cart shopping">
+    <div class="container">
+      {% if not cart_items %}
+          <h2 class="text-center"> Your shopping cart is empty !!</h2> 
+          <div class="text-center"> 
+            <a href=" {% url 'home' %} " class="btn btn-main mt-20">Continue shopping</a>
+          </div>
+
+      {%else%}
+       <div class="col-md-12 col-md-offset-1">
+
+          <div class="row">
+            {% for cart_item in cart_items %}
+            <div class="col-md-3">
+                <img width="120" src="{{ cart_item.product.images.url }}" alt="" />                        
+            </div>
+            <div class="col-md-2">
+              <a href="{{ cart_item.product.get_url }}"> {{ cart_item.product.product_name }}</a>
+              <p class="text-muted small">
+                {% if cart_item.variations.all %}
+                  {% for item in cart_item.variations.all %}
+                      Color: {{ item.color |capfirst }} 
+                  {% endfor %}
+                  <br>
+                  {% for item in cart_item.variations.all %}
+                      size: {{ item.size |capfirst }} 
+                  {% endfor %}
+                {% endif %}
+              </p>
+            </div>
+            <div class="col-md-2">
+                    <div class="form-group">
+        <div class="input-group">
+            <div class="input-group-btn">
+              <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
+                {% csrf_token %}
+                      {% for item in cart_item.variations.all %}
+                        <input type="hidden" value="{{ item.color}}" name="color">  
+                      {% endfor %}
+                      {% for item in cart_item.variations.all %}
+                        <input type="hidden" value="{{ item.size}}" name="size">  
+                      {% endfor %}
+                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-default" type="button" id="down" onclick=" down('0')"> - </a> 
+                      
+                <!-- <button id="down" class="btn btn-default" onclick=" down('0')"><span class="glyphicon glyphicon-minus"></span></button> -->
+            </div>
+              <input type="text" id="myNumber" class="form-control" value="{{ cart_item.quantity }}"/>
+            <div class="input-group-btn">
+                <button id="up"  type="submit" class="btn btn-default" onclick="up('10')"><span class="glyphicon glyphicon-plus"></span></button>
+            </div>
+          </form> 
+
+        </div>
+        </div>
+            </div>
+            <div class="col-md-2 text-center">
+            
+              ₹ {{ cart_item.sub_total }}
+            </div>
+            <div class="col-md-3">
+
+              <a class="btn btn-danger" href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" onclick="return confirm('Are you sure you want to delete this item?') " >Remove</a>
+            </div>
+            
+           
+
+          </div>
+          <hr>
+          {% endfor %}
+        </div>
+
+        
+        
+     
+      
+    </div>
+    <div class="row">
+      <hr>
+      <div class="col-md-4 col-md-offset-4 text-center">
+        <div class="well">
+          <h3 class="billing-heading mb-4">Cart Total</h3>
+	          			<p class="d-flex">
+		    						<span>total</span>
+		    						<span>₹{{ total }}</span>
+		    					</p>  
+        </div>
+        
+      </div> 
+      <div class="col-md-2  text-right">
+        <p>
+          <a href="{% url 'checkout' %}" class="btn btn-main pull-right">Checkout</a>
+        </p>
+      </div>
+      {% endif %}
+    </div>  
+    
+
+  </div>
+</div>
+
+
+{% endblock %}

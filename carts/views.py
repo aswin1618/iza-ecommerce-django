@@ -191,6 +191,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
 
 @login_required(login_url='signin')
 def checkout(request, total=0, quantity=0, cart_items=None):
+     delivery= 50
      try:
           if request.user.is_authenticated:
                cart_items = CartItem.objects.filter(user=request.user, is_active=True)
@@ -204,9 +205,15 @@ def checkout(request, total=0, quantity=0, cart_items=None):
           pass
      userprofile = get_object_or_404(UserProfile ,user=request.user)
      adress_list = UserAdress.objects.filter(user=userprofile)
-     
+     if total < 2000 :
+          final_total = total + delivery
+     else:
+          
+          final_total = total
+          
      context = {
           'total' : total,
+          'final_total' :final_total,
           'quantity' : quantity,
           'cart_items' : cart_items,
           'adress_list': adress_list

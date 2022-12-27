@@ -1,4 +1,4 @@
-from django.shortcuts import render ,get_object_or_404 
+from django.shortcuts import render ,get_object_or_404 ,redirect
 from category.models import Category , SubCategory
 from store.models import Product,Variation
 from carts.views import _cart_id
@@ -43,10 +43,7 @@ def store(request,category_slug = None,SubCategory_slug = None):
         paged_products = paginator.get_page(page)
 
     else:
-        products = Product.objects.all().filter(is_available = True).order_by('id')
-        paginator = Paginator(products, 6)
-        page = request.GET.get('page')
-        paged_products = paginator.get_page(page)
+        return redirect('home')
 
     sub_categories = SubCategory.objects.all().filter(category_name = categories)
     

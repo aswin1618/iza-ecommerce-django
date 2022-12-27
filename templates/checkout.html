@@ -12,144 +12,120 @@
 					<h1 class="page-name">Checkout</h1>
 					<ol class="breadcrumb">
 						<li><a href="index.html">Home</a></li>
-						<li class="active">checkout</li>
+						<li class="active">Checkout</li>
 					</ol>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
-<div class="page-wrapper">
-   <div class="checkout shopping">
-      <div class="container">
-         <div class="row">
-            <div class="col-md-8">
-               <div class="block billing-details">
-                  <h4 class="widget-title">Billing Details</h4>
-                  <form class="checkout-form" action="{% url 'place_order' %}" method="POST">
-                     {% csrf_token %}
-                  <h4 class="card-title my-4">Select Adress</h4>
-                     <a class="btn btn-info" href="{% url 'add_adress' %}" > add new address +</a>  <br><br>
-                     {% for adress in adress_list %} 
-                     <input type="radio" id="{{adress.id}}" name="order_adress" value="{{adress.id}}" required>
-                     <label for="{{adress.id}}"></label>
-                           <div class="row">
-                              <div class="col-md-8 col-md-offset-1">
-                           <div class="panel panel-default">
-                              <div class="panel-heading">
-                                 <a data-toggle="collapse" href="#collapse1">{{ adress.snap}}</a>
-                              </div>
-                              <div id="collapse1" class="panel-collapse collapse in">
-                                 <div class="panel-body">{{ adress.user}} <br>{{ adress.phone}} <br>
-                                    {{ adress.adress_line_1}} <br>
-                                    {{ adress.adress_line_2}} <br>
-                                    {{ adress.pin_code}} <br>
-                                    {{ adress.district}} <br> {{ adress.city}}<br>{{ adress.state}}
-                                 </div>
-                              </div>
-                              </div>
-                              </div>
+
+<div class="container-fluid">
+   
+   <div class="col-md-10 col-md-offset-1">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="block billing-details">
+      <div class="well" style="background: white">
+            
+            <form class="checkout-form" action="{% url 'place_order' %}" method="POST">
+               {% csrf_token %}
+            <h4 class="card-title my-4">Delivery Adress</h4>
+               
+               {% for adress in adress_list %} 
+               
+
+               {% if forloop.first %}
+               <input type="radio" id="{{adress.id}}" name="order_adress" value="{{adress.id}}"  checked required>
+               {% else %}
+               <input type="radio" id="{{adress.id}}" name="order_adress" value="{{adress.id}}" required>
+               {% endif %}
+               <label for="{{adress.id}}"></label>
+                     <div class="panel panel-default text-center   ">
+                        <div class="panel-heading">
+                           <a data-toggle="collapse" href="#c{{forloop.counter}}">Adress {{forloop.counter}}</a>
+                        </div>
+                        {% if forloop.first %}
+                        <div id="c{{forloop.counter}}" class="panel-collapse collapse in">
+                        {% else %}
+                        <div id="c{{forloop.counter}}" class="panel-collapse collapse">
+                        {% endif %}
+                           <div class="panel-body">{{ adress.user}} <br>{{ adress.phone}} <br>
+                              {{ adress.adress_line_1}} <br>
+                              {{ adress.adress_line_2}} <br>
+                              {{ adress.pin_code}} <br>
+                              {{ adress.district}} <br> {{ adress.city}}<br>{{ adress.state}}
                            </div>
-                        
-                      {% endfor %}  
-                     
-                  
-               </div>
-               <div class="well">
-              
-                  <h4 class="card-title my-4">Select payment method:</h4>
-                  <div class="col-6">
-                     <input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery" required>
-                     <label for="cash_on_delivery">CASH ON DELIVERY</label>
-                  </div>
-                  <div class="col-6">
-                    <input type="radio" id="razorpay" name="payment_method" value="razorpay">
-                    <label for="razorpay">RAZORPAY</label>
-                  </div>
-                </div>
-
-            </div>
-            <div> <div> <div> <div>
-            <div class="col-md-1">
-               <div class="product-checkout-details">
-                  <div class="block">
-                     {% if not cart_items %}
-                     <h2 class="text-center"> Your shopping cart is empty !!</h2> 
-                     <div class="text-center"> 
-                       <a href=" {% url 'home' %} " class="btn btn-main mt-20">Continue shopping</a>
+                       
+                        </div>
                      </div>
-           
-                 {%else%}
-                 <div class="row">
-                   <div class="col-md-12 col-md-offset-2">
-                     <div class="block">
-                       <div class="product-list">
-                           <table class="table" style="border-spacing: 40px;">
-                             <thead>
-                               <tr>
-                                 <th style="width:70%"> </th>
-                                 <th scope="col">Item name</th>
-                                 <th scope="col">Item count</th>
-                                 <th scope="col">Item Price</th>
-                               </tr>
-                             </thead>
-                             <tbody>
-                               {% for cart_item in cart_items %}
-                               <tr class="">
-                                 <td class="">
-                                   <div class="product-info">
-                                     <img width="67" src="{{ cart_item.product.images.url }}" alt="" />                        
-                                   </div>
-                                 </td>
-                                 <td>
-                                     <a style="font-size: 10px" href="{{ cart_item.product.get_url }}"> {{ cart_item.product.product_name }}</a>
-                                     <p style="font-size: 7px" class="text-muted small">
-                                       {% if cart_item.variations.all %}
-                                          {% for item in cart_item.variations.all %}
-                                             Color: {{ item.color |capfirst }} 
-                                          {% endfor %}
-                                          <br>
-                                          {% for item in cart_item.variations.all %}
-                                             size: {{ item.size |capfirst }} 
-                                          {% endfor %}
-                                       {% endif %}
-                                     </p>
-                                 </td>
-                                 <td class=""> {{ cart_item.quantity }}</td>
-
-                                 <td class=""> ₹ {{ cart_item.sub_total }}</td>
-                               </tr>
-                               {% endfor %}
-                             </tbody>
-                           </table>
-                           
-                              <h5> Total: ₹ {{ total }}</h5> 
-                         
-                       </div>
-                              {% comment %} <div class="">
-                                 <h4 class="card-title my-4">Select Payment method:</h4>
-                                 <div class="col-6"><input type="radio" id="cash_on_delivery" name="payment_method" value="cod">
-                                    <label for = "cash_on_delivery"> Cash On Delivery</label>
-                                 </div>
-                                 <div class="col-6"><input type="radio" id="razorpay" name="payment_method" value="razorpay">
-                                    <label for = "razorpay">RAZORPAY</label>
-                                 </div>
-                              </div> {% endcomment %}
-                     </div> 
-                     <button type="submit" class="btn btn-main text-center">place order</button>
-                     </form>
-                   </div>
-                 </div>
-                 {% endif %}
-               </div>
-                  </div>
-               </div>
-            </div>
+                 
+                  
+                {% endfor %}  
+                <a class="btn btn-primary" href="{% url 'add_adress' %}" >  add new address +</a> 
+               </div> 
+          
          </div>
       </div>
    </div>
-</div>
 
-   
+      <div class="row">
+      <div class="col-md-6">
+         <div class="well">
+            <h3 class="billing-heading mb-4">Cart Total</h3>
+	          			<p class="d-flex">
+		    						<span>Subtotal</span>
+		    						<span>₹{{ total }}</span>
+		    					</p>
+                        {% if total < 2000 %}
+		    					<p class="d-flex">
+		    						<span>Delivery</span>
+		    						<span>₹50 <sub>(delivery charges apply for purchase total less than ₹2000)</sub></span>
+		    					</p>
+                        {% else %}
+                        <p class="d-flex">
+                           <span>Delivery</span>
+                           <span>₹0 </span>
+                        </p>
+                         {% endif %}
+		    					<hr>
+		    					<p class="d-flex total-price">
+		    						<span>Total</span>
+		    						<span>₹{{ final_total }}</span>
+		    					</p>
+         </div>
+
+      </div>
+      <div class="col-md-6">
+         <div class="well">
+         <div class="cart-detail bg-light p-3 p-md-4">
+            <h3 class="billing-heading mb-4">Payment Method</h3>
+                 <div class="form-group">
+                    <div class="col-md-12">
+                       <div class="radio">
+                          <label><input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery" required class="mr-2"> Cash On Delivery</label>
+                       </div>
+                    </div>
+                 </div>
+                 <div class="form-group">
+                    <div class="col-md-12">
+                       <div class="radio">
+                          <label><input type="radio" id="razorpay" name="payment_method" value="razorpay"class="mr-2"> Razorpay</label>
+                       </div>
+                    </div>
+                 </div>
+                 <p><button type="submit" class="btn btn-main text-center">place order</button>
+                 </form>
+              </div>
+            </div>
+      </div>
+  
+
+
+
+   </div>
+   </div>
+</div>
+</div>
 
 {% endblock %}

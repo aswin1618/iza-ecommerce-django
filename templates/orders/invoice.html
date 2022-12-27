@@ -196,7 +196,7 @@ footer {
                                        {% endif %} </p>
                   </td>
                   <td>{{item.quantity}}</td>
-                  <td>{{item.product_price}} INR  </td>
+                  <td>{{item.sub_total}} INR  </td>
                   
               </tr>
               {% endfor %}
@@ -204,7 +204,12 @@ footer {
                   <td scope="row"></td>
                   <td>TOTAL: </td>
                   <td>{{amount}}</td>
-                  
+
+                  {% if amount < 2000 %}
+                  <p class="d-flex">
+		    						<span><sub>(delivery charges(Rs.50) apply for purchase total less than ₹2000)</sub></span>
+		    					</p>
+                  {% endif %}
               </tr>
           </tbody>
       </table>

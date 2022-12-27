@@ -14,7 +14,7 @@ $(document).ready(function () {
         
         var options = {
             "key": "rzp_test_nCGq2eKcFYga3A",
-            "amount": "100", 
+            "amount": amount_paid * 100, 
             "currency": "INR",
             "name": "IZA",
             "description": "Thank you for shopping wit us",

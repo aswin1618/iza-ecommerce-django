@@ -45,11 +45,11 @@
                                    <td>{{order.user.first_name}}</td>
                                    <td>{{order.order_adress.phone}}</td>
                                    <td>₹ {{order.order_total}}</td>
-                                   <td>{{ order.status }}</td>
+                                   <td><b>{{ order.status }}</b></td>
                                    <td>{{order.created_at}}</td>
                                    {% if order.status != 'Cancelled' %}
                                    <td><a href="{% url 'cancel_order' order.order_number %}"><button
-                                         class="btn btn-sm btn-dark">Cancel</button></a></td>
+                                         class="btn btn-danger">Cancel</button></a></td>
                                          {% else %}
                                          <td>Cancelled</td>
                                        {% endif %}

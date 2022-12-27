@@ -21,6 +21,11 @@
             </div>
           </form>
         </div>
+        {% comment %} {% for ordr in user_order %}
+           <li>
+              {{ ordr.user.first_name }}
+           </li>
+        {% endfor %} {% endcomment %}
         <div class="shopping__cart__table">
           <table class="table bg-white">
             <thead>

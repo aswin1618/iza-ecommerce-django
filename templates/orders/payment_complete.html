@@ -35,9 +35,8 @@
                             <div class="invoice-from">
                                 <ul class="list-unstyled text-right">
                                     <li><strong>Invoiced To</strong></li>
-                                    <li>{{order.user}}</li>
-                                    <li>{{order.full_address}}</li>
-                                    <li>{{order.city}}, {{order.state}}</li>
+                                    <li>{{order.user.first_name}}</li>
+                                    <li>{{order.user.phone_number}}</li>
                                 </ul>
                             </div>
                         </div>
@@ -82,11 +81,17 @@
                                           			</p>
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">₹ {{item.product_price}} INR</td>
+                                                <td class="text-center">₹ {{item.sub_total}} INR</td>
                                             </tr>
                                           {% endfor %}
                                         </tbody>
-                                        
+                                        <tfoot>
+
+                                            <tr>
+                                                <th colspan="2" class="text-right">Grand Total:</th>
+                                                <th class="text-center">₹ {{total_amount}} INR</th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>

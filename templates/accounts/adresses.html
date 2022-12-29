@@ -23,9 +23,13 @@
                   <div class="col-md-8 text-center col-md-offset-2">
                 <div class="panel panel-default">
                   <div class="panel-heading">
-                      <a data-toggle="collapse" href="#collapse1">{{ adress.snap}}<br></a>
+                      <a data-toggle="collapse" href="#c{{forloop.counter}}">{{ adress.snap}}<br></a>
                   </div>
-                  <div id="collapse1" class="panel-collapse collapse in">
+                  {% if forloop.first %}
+                    <div id="c{{forloop.counter}}" class="panel-collapse collapse in">
+                    {% else %}
+                    <div id="c{{forloop.counter}}" class="panel-collapse collapse">
+                  {% endif %}
                   <div class="panel-body">{{ adress.user}} <br>{{ adress.phone}} <br>
                     {{ adress.adress_line_1}} <br>
                     {{ adress.adress_line_2}} <br>

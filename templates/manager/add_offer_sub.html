@@ -6,18 +6,18 @@
     {% include 'includes/alerts.html' %}
     <div class="row d-flex justify-content-center">
       <div class="col-6">
-        <h2 class="text-center font-weight-bold text-dark my-5">Add Category</h2>
-        <form action="{% url 'add_category' %}" method="POST">
+        <h2 class="text-center font-weight-bold text-dark my-5">offer</h2>
+        <form action="{% url 'add_sub_offer' %}" method="POST">
           {% csrf_token %}
           <div class="form-row">
-            <div class="form-group col-md-12  ">
-              <label for="category_name">Category Name</label>
-              {{form.category_name}}            
+            <div class="form-group col-md-6  ">
+              <label for="category_name">subcategory</label>
+              {{form.subcategory}}            
             </div>
             <div class="form-row">
-                <div class="form-group col-md-12  ">
-                  <label for="category_name">Category Image</label>
-                  {{form.cat_image}}            
+                <div class="form-group col-md-6  ">
+                  <label for="category_name">offer percentage</label>
+                  {{form.sub_category_offer}}            
                 </div>
           </div>
           <div class="text-center">

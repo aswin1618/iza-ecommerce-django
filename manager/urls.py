@@ -33,4 +33,13 @@ urlpatterns = [
     path('add_variation/', views.add_variation, name='add_variation'),
     path('update_variation/<int:variation_id>/',views.update_variation,name='update_variation'),
     path('delete_variation/<int:variation_id>/', views.delete_variation, name='delete_variation'),
+    
+    path('offer_management/',views.offer_management,name='offer_management'),
+    path('subcategory_offer/',views.subcategory_offer,name='subcategory_offer'),
+    path('brand_offer/',views.brand_offer,name='brand_offer'),
+    
+    path('add_sub_offer/',views.add_sub_offer,name='add_sub_offer'),
+    path('add_brand_offer/',views.add_brand_offer,name='add_brand_offer'),
+    
+    
 ]

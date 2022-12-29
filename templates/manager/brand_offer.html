@@ -1,0 +1,24 @@
+{% extends "manager/managerbase.html" %}
+{% block content %}
+
+<div class="container" style=background-color:#F3F2EE;>
+    <br>
+    <div class="text-right">
+        <a href="{% url 'add_brand_offer' %}" class="btn btn-info">Add New</a>
+      </div>
+    <div class="col-md-10">
+        
+        <div class="row">
+            <hr>
+            {% for offer in offers %}
+            <div class="col-md-4">
+                <div class="well">
+                    <h5><b>Brand Name :</b>{{offer.brand}}</h5> 
+                    Offer:{{offer.brand_offer}}%
+                </div>
+             </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

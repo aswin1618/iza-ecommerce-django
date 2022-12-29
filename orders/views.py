@@ -72,7 +72,7 @@ def payments(request):
         order_product.user = request.user
         order_product.product = cart_item.product
         order_product.quantity = cart_item.quantity
-        order_product.product_price = cart_item.product.price
+        order_product.product_price = cart_item.product.price()
         order_product.ordered = True
         order_product.save()
 
@@ -145,8 +145,8 @@ def place_order(request, total=0, quantity=0):
         return redirect ('store')
     
     total=0
-    for cart_item in cart_items:
-        total += (cart_item.product.price * cart_item.quantity)
+    for cart_item in cart_items:   
+        total += (cart_item.product.price() * cart_item.quantity)
         quantity += cart_item.quantity
         
     delivery = 50

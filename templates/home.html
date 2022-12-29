@@ -7,28 +7,20 @@
 {% include 'includes/alerts.html' %}
 
 <div class="hero-slider">
-  <div class="slider-item th-fullpage hero-area" style="background-image: url(static/images/slider/slider-1.jpg);">
+	{% for banner in banners  %}
+  <div class="slider-item th-fullpage hero-area" style="background-image: url({{ banner.img.url }});">
     <div class="container">
       <div class="row">
         <div class="col-lg-8 text-center">
           <p data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".1">PRODUCTS</p>
-          <h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".5">Your ultimate <br> sportswear destination</h1>
+          <h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".5"> {{ banner.text }} </h1>
         </div>
       </div>
     </div>
   </div>
-  <div class="slider-item th-fullpage hero-area" style="background-image: url(static/images/slider/slider-3.jpg);">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 text-left">
-          <p data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".1">PRODUCTS</p>
-          <h1 data-duration-in=".3" data-animation-in="fadeInUp" data-delay-in=".5">The beauty of nature <br> is hidden in details.</h1>
-        
-        </div>
-      </div>
-    </div>
-  </div>
+  {% endfor %}
 </div>
+
 <!--product category-->
 <section class="product-category section">
 	<div class="container">
@@ -67,6 +59,7 @@
 		</div>
 		<div class="row">
 			{% for product in products %}
+			{% if forloop.counter < 5 %}
 			<div class="col-md-3">
 				<div class="product-item">
 					<div class="product-thumb">
@@ -85,10 +78,11 @@
 					</div>
 					<div class="product-content">
 						<h4><a href="{{ product.get_url }}">  {{ product.brand }} {{ product.product_name }} </a></h4>
-						<p class="price"> ₹ {{ product.price }}</p>
+						<p class="price"><s> ₹ {{ product.stock_price }} </s> &emsp;{{ product.offer }}% off<br> <b>₹ {{ product.price }}</b></p>
 					</div>
 				</div>
 			</div>
+			{% endif %}
 			{% endfor %}
 				
 		</div>
@@ -101,11 +95,12 @@
 	<div class="container">
 		<div class="row">
 			<div class="title text-center">
-				<h2>Best Buys</h2>
+				<h2>Featured Products</h2>
 			</div>
 		</div>
 		<div class="row">
-			{% for product in products %}
+			{% for product in featured_products %}
+			{% if forloop.counter < 5 %}
 			<div class="col-md-3">
 				<div class="product-item">
 					<div class="product-thumb">
@@ -124,10 +119,11 @@
 					</div>
 					<div class="product-content">
 						<h4><a href="{{ product.get_url }}">  {{ product.brand }} {{ product.product_name }} </a></h4>
-						<p class="price"> ₹ {{ product.price }}</p>
+						<p class="price">₹ {{ product.stock_price }} {{ product.offer }} ₹ {{ product.price }}</p>
 					</div>
 				</div>
 			</div>
+			{% endif %}
 			{% endfor %}
 				
 		</div>

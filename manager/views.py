@@ -2,13 +2,13 @@ from django.shortcuts import render,redirect
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required, user_passes_test
 from user.models import Account,UserProfile,UserAdress
-from store.models import Product,Variation
+from store.models import Product,Variation,SubcategoryOffer,BrandOffer
 from orders.models import Order
 from category.models import Category,SubCategory
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
-from .forms import ProductForm,CategoryForm,SubCategoryForm,VariationForm
+from .forms import ProductForm,CategoryForm,SubCategoryForm,VariationForm,SubCategoryOfferForm,BrandOfferForm
 
 # Create your views here.
 
@@ -125,11 +125,22 @@ def add_product(request):
     
     if form.is_valid():
       product_name= form.cleaned_data['product_name']
-      brand= form.cleaned_data['brand']
       form.save()
       product =Product.objects.get(product_name=product_name) 
-      product.slug=slugify(brand)+"-"+slugify(product_name)
-      product.save()
+      brand1 = str(product.brand)
+      product.slug=slugify(brand1)+"-"+slugify(product_name)
+      sub_category = product.SubCategory
+      brand = product.brand
+      try:
+        sub_cat_offer = SubcategoryOffer.objects.get(subcategory=sub_category)
+        brand_offer = BrandOffer.objects.get(brand=brand)
+        product.sub_category_offer = sub_cat_offer.sub_category_offer
+        product.brand_offer = brand_offer.brand_offer
+        product.save()
+      except:
+        product.sub_category_offer = 0
+        product.brand_offer = 0
+        product.save()
       return redirect('product_management')
     else:
       print(form.errors)
@@ -475,3 +486,71 @@ def delete_variation(request, variation_id):
   product.stock = product.stock - variation_stock
   product.save()
   return redirect('variation_management')
+
+
+
+#manage offers 
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def offer_management(request):
+  return render(request,'manager/offer_management.html')
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def subcategory_offer(request):
+  offers = SubcategoryOffer.objects.all()
+  return render(request,'manager/subcategory_offer.html',{'offers':offers})
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def add_sub_offer(request):
+  if request.method == 'POST':
+    form = SubCategoryForm(request.POST)
+    if form.is_valid():
+        form.save()
+        
+        return redirect('subcategory_offer')
+
+    else:
+      messages.error(request, "offer with this category already exists")
+      return redirect('add_sub_offer')
+  else:
+    form = SubCategoryOfferForm()
+    context = {
+      'form': form
+    }
+  return render(request, 'manager/add_offer_sub.html', context)
+
+
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def brand_offer(request):
+  offers = BrandOffer.objects.all()
+  return render(request,'manager/brand_offer.html', {'offers':offers})
+
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def add_brand_offer(request):
+  if request.method == 'POST':
+    form = BrandOfferForm(request.POST)
+    if form.is_valid():
+        form.save()
+        
+        return redirect('brand_offer')
+
+    else:
+      messages.error(request, "offer with this brand already exists")
+      return redirect('add_brand_offer')
+  else:
+    form = BrandOfferForm()
+    context = {
+      'form': form
+    }
+  return render(request, 'manager/add_offer_brand.html', context)

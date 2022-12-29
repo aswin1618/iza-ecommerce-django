@@ -31,5 +31,4 @@ class SubCategory(models.Model):
         return reverse('products_by_subcategory', args = [self.category_name.slug, self.slug])
     
     def __str__(self):
-        return self.subcat_name
-
+        return f'{self.category_name}--{self.subcat_name}'

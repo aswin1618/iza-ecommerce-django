@@ -1,0 +1,24 @@
+{% extends "manager/managerbase.html" %}
+{% block content %}
+
+<div class="container" style=background-color:#F3F2EE;>
+    {% include 'includes/manager_dashboard_sidebar.html' %}
+    <div class="col-md-9">
+   
+        
+        <div class="row">
+            <br>
+            <div class="well" style="width: 300px;">
+                <h5>SubCategories</h5>
+                <a href="{% url 'subcategory_offer' %}" class="btn btn-info ">Review Offer</a> <br>
+            </div>
+            <div class="well" style="width: 300px;">
+                <h5>Brands</h5>
+                <a href="{% url 'brand_offer' %}" class="btn btn-info ">Review offers</a> <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

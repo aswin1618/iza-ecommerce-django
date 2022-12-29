@@ -1,0 +1,25 @@
+{% extends "manager/managerbase.html" %}
+{% block content %}
+
+<div class="container" style=background-color:#F3F2EE;>
+    <br>
+        <div class="text-right">
+            <a href="{% url 'add_sub_offer' %}" class="btn btn-info">Add New</a>
+          </div>
+    <div class="col-md-10">
+        
+        <div class="row">
+            <hr>
+            {% for offer in offers %}
+            <div class="col-md-4">
+                <div class="well">
+                    <h5><b>Category :</b>{{offer.subcategory.category_name}}</h5> 
+                    <h5><b>subcategory :</b>{{offer.subcategory.subcat_name}}</h5> 
+                    Offer:{{offer.sub_category_offer}}%
+                </div>
+             </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

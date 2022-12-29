@@ -1,5 +1,5 @@
 from django import forms
-from store.models import Product,Variation
+from store.models import Product,Variation,SubcategoryOffer,BrandOffer
 from category.models import Category,SubCategory
 
 
@@ -7,7 +7,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['product_name','brand','description', 'price','images','category','SubCategory','is_available', 'is_featured']
+        fields = ['product_name','brand','description', 'stock_price','images','category','SubCategory','is_available', 'is_featured']
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
@@ -56,3 +56,28 @@ class VariationForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control'
 
         self.fields['is_active'].widget.attrs['class'] = 'ml-2 mt-1 form-check-input'
+
+
+class SubCategoryOfferForm(forms.ModelForm):
+
+    class Meta:
+        model = SubcategoryOffer
+        fields = ['subcategory', 'sub_category_offer']
+
+    def __init__(self, *args, **kwargs):
+        super(SubCategoryOfferForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+            
+class BrandOfferForm(forms.ModelForm):
+
+    class Meta:
+        model = BrandOffer
+        fields = ['brand', 'brand_offer']
+
+    def __init__(self, *args, **kwargs):
+        super(BrandOfferForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'

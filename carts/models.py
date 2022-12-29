@@ -1,6 +1,10 @@
 from django.db import models
 from store.models import Product,Variation
 from user.models import Account
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+
+QUANTITY_VALIDATOR = [MinValueValidator(0), MaxValueValidator(10)]
 
 # Create your models here.
 class Cart(models.Model):
@@ -15,11 +19,11 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete = models.CASCADE)
     variations = models.ManyToManyField(Variation, blank=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(validators=QUANTITY_VALIDATOR)
     is_active = models.BooleanField(default=True)
 
     def sub_total(self):
-        return self.product.price * self.quantity
+        return self.product.price() * self.quantity
 
     def __unicode__(self):
         return self.product

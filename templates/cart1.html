@@ -55,26 +55,21 @@
             </div>
             <div class="col-md-2">
                     <div class="form-group">
-        <div class="input-group">
-            <div class="input-group-btn">
-              <form action="{% url 'add_cart' cart_item.product.id %}" method="POST">
-                {% csrf_token %}
-                      {% for item in cart_item.variations.all %}
-                        <input type="hidden" value="{{ item.color}}" name="color">  
-                      {% endfor %}
-                      {% for item in cart_item.variations.all %}
-                        <input type="hidden" value="{{ item.size}}" name="size">  
-                      {% endfor %}
-                <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-default" type="button" id="down" onclick=" down('0')"> - </a> 
-                      
-                <!-- <button id="down" class="btn btn-default" onclick=" down('0')"><span class="glyphicon glyphicon-minus"></span></button> -->
+           
+          <div class="form-group prod-qty">
+            <div class="input-group">
+              {% csrf_token %}
+                <div class="input-group-btn">
+                    <button id="down" type="button" class="btn btn-default decrement-btn"><span class="glyphicon glyphicon-minus"></span></button>
+                </div>
+                  <input type="text" id="myNumber" class="form-control qty text-center" value="{{ cart_item.quantity }}" style="border-radius: 5px; height:36px;"/>
+                <div class="input-group-btn">
+                    <button id="up"  type="button" class="btn btn-default increment-btn"><span class="glyphicon glyphicon-plus"></span></button>
+                </div>
+              
+    
             </div>
-              <input type="text" id="myNumber" class="form-control" value="{{ cart_item.quantity }}"/>
-            <div class="input-group-btn">
-                <button id="up"  type="submit" class="btn btn-default" onclick="up('10')"><span class="glyphicon glyphicon-plus"></span></button>
-            </div>
-          </form> 
-
+          </div>
         </div>
         </div>
             </div>

@@ -50,7 +50,11 @@ def add_cart(request,product_id):
                     index = ex_var_list.index(product_variation)
                     item_id = id[index]
                     item = CartItem.objects.get(product=product, id=item_id)
-                    item.quantity +=1
+                    if item.quantity<10:
+                         item.quantity +=1
+                    else:
+                         messages.error(request,'You can only buy upto 10 products at one time')
+                         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
                     item.save()
                else:
                     item = CartItem.objects.create(product=product, quantity=1, user=current_user)
@@ -179,8 +183,13 @@ def cart(request, total=0, quantity=0, cart_items=None):
      except ObjectDoesNotExist:
           pass
 
+     try:
+          cart = Cart.objects.get(cart_id=_cart_id(request)) #getting the cart using the cart id in the session
+     except Cart.DoesNotExist:
+          cart = Cart.objects.create(cart_id = _cart_id(request))
      
-               
+     cart.total_price = total
+     cart.save()   
      
           
      context = {
@@ -201,10 +210,18 @@ def checkout(request, total=0, quantity=0, cart_items=None):
                cart = Cart.objects.get(cart_id= _cart_id(request))
                cart_items = CartItem.objects.filter(cart=cart, is_active=True)
           for cart_item in cart_items:
-               total += (cart_item.product.price() * cart_item.quantity)
                quantity += cart_item.quantity
      except ObjectDoesNotExist:
           pass
+     
+     try:
+          cart = Cart.objects.get(cart_id=_cart_id(request)) #getting the cart using the cart id in the session
+     except Cart.DoesNotExist:
+          cart = Cart.objects.create(cart_id = _cart_id(request))
+     
+     total = cart.total_price
+     
+       
      userprofile = get_object_or_404(UserProfile ,user=request.user)
      adress_list = UserAdress.objects.filter(user=userprofile)
      if total < 2000 :

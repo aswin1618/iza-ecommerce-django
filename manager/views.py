@@ -131,16 +131,22 @@ def add_product(request):
       product.slug=slugify(brand1)+"-"+slugify(product_name)
       sub_category = product.SubCategory
       brand = product.brand
+
+     
       try:
-        sub_cat_offer = SubcategoryOffer.objects.get(subcategory=sub_category)
-        brand_offer = BrandOffer.objects.get(brand=brand)
-        product.sub_category_offer = sub_cat_offer.sub_category_offer
-        product.brand_offer = brand_offer.brand_offer
-        product.save()
+        product.sub_category_offer = SubcategoryOffer.objects.get(subcategory=sub_category)
       except:
-        product.sub_category_offer = 0
-        product.brand_offer = 0
-        product.save()
+        # product.sub_category_offer = None
+        pass
+        
+      
+      try:
+        product.brand_offer = BrandOffer.objects.get(brand=brand)
+      except:
+        # product.brand_offer = None
+        pass
+      
+      product.save()
       return redirect('product_management')
     else:
       print(form.errors)

@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from carts.models import CartItem
+from carts.models import CartItem,Cart
 # from .forms import OrderForm
 from .models import Order,Payment,OrderProduct
 import razorpay
@@ -24,6 +24,11 @@ from xhtml2pdf import pisa
 razorpay_client = razorpay.Client(
     auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
+def _cart_id(request):
+     cart = request.session.session_key
+     if not cart:
+          cart = request.session.create()
+     return cart
 
 def payments(request):
     
@@ -96,6 +101,12 @@ def payments(request):
     
     cart_items = CartItem.objects.filter(user=request.user)
     cart_items.delete()
+    try:
+          cart = Cart.objects.get(cart_id=_cart_id(request)) #getting the cart using the cart id in the session
+    except Cart.DoesNotExist:
+          cart = Cart.objects.create(cart_id = _cart_id(request))
+    cart.delete()
+    
     print("cart item deleted")
     # order confirmed email
     # mail_subject = 'Thank You for your order!'
@@ -117,6 +128,8 @@ def order_complete(request):
     order_number = request.GET.get('order_number')
     order = Order.objects.get(user=request.user, order_number=order_number)
     ordered_products = OrderProduct.objects.filter(order=order)
+
+    
     total_amount = 0
     for item in ordered_products:
         total_amount += (item.product_price * item.quantity)
@@ -133,8 +146,9 @@ def order_complete(request):
 
 
 
+
 # Create your views here.
-def place_order(request, total=0, quantity=0):
+def place_order(request, quantity=0):
     current_user = request.user
     
     #if the cart count is less than zero ,then redirect to shop
@@ -144,11 +158,16 @@ def place_order(request, total=0, quantity=0):
     if cart_count <=0:
         return redirect ('store')
     
-    total=0
+    
     for cart_item in cart_items:   
-        total += (cart_item.product.price() * cart_item.quantity)
         quantity += cart_item.quantity
         
+    try:
+          cart = Cart.objects.get(cart_id=_cart_id(request)) #getting the cart using the cart id in the session
+    except Cart.DoesNotExist:
+          cart = Cart.objects.create(cart_id = _cart_id(request))
+    
+    total = cart.total_price
     delivery = 50
     if total < 2000 :
           final_total = total + delivery

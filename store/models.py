@@ -28,7 +28,7 @@ class BrandOffer(models.Model):
     
 class Product(models.Model):
     product_name = models.CharField(max_length = 200, unique = True)
-    slug         = models.SlugField(max_length = 200, unique =True)
+    slug         = models.SlugField(max_length = 200,)
     brand        = models.ForeignKey(Brand,on_delete=models.CASCADE)
     description  = models.TextField(max_length = 500 ,blank = True)
     stock_price  = models.PositiveIntegerField()
@@ -40,8 +40,8 @@ class Product(models.Model):
     created_date = models.DateTimeField(auto_now_add = True)
     modified_date= models.DateTimeField(auto_now=True)
     is_featured = models.BooleanField(default = False)
-    sub_category_offer = models.ForeignKey(SubcategoryOffer,on_delete=models.CASCADE,null=True,blank=True,default=0 )
-    brand_offer = models.ForeignKey(BrandOffer,on_delete=models.CASCADE,null=True,blank=True, default=0)
+    sub_category_offer = models.ForeignKey(SubcategoryOffer,on_delete=models.CASCADE,null=True,blank=True)
+    brand_offer = models.ForeignKey(BrandOffer,on_delete=models.CASCADE,null=True,blank=True)
 
     def get_url(self):
         print(self.slug)

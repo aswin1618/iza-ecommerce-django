@@ -34,6 +34,7 @@
       {%else%}
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
+          {% include 'includes/alerts.html' %}
           <div class="block">
             <div class="product-list">
                 <table class="table">
@@ -102,24 +103,12 @@
                   </tbody>
                 </table>
                 <hr>
-
-                <div class="row">
-                  <div class="col-md-6">
-                     <div class="well">
-                        <h3 class="billing-heading mb-4">Cart Total</h3>
-                                    
-                              <hr>
-                              <p class="d-flex total-price">
-                                <span>Total</span>
-                                <span>₹{{ cart.total }}</span>
-                              </p>
-                              <a href="{% url 'coupon' %}" class="btn btn-main pull-right">continue</a><br>
-                     </div>
-                    </div>
-                 </div>
+                <a href="{% url 'coupon' %}" class="btn btn-main pull-right">continue</a><br>
+              <h5>Total ₹{{ total }}</h5>
+               
             
                 
-                   {% comment %} <h5> Total: ₹ {{ total }}</h5>  {% endcomment %}
+              
               
             </div>
           </div>

@@ -18,13 +18,15 @@ class SubcategoryOffer(models.Model):
     subcategory = models.OneToOneField(SubCategory,on_delete=models.CASCADE)
     sub_category_offer = models.IntegerField(validators=PERCENTAGE_VALIDATOR,blank=True,null=True,default=0)
     is_expired = models.BooleanField(default=False)
-    
+    def __str__(self):
+        return self.subcategory.subcat_name
     
 class BrandOffer(models.Model):
     brand = models.OneToOneField(Brand,on_delete=models.CASCADE)
     brand_offer = models.IntegerField(validators=PERCENTAGE_VALIDATOR,blank=True,null=True,default=0)
     is_expired = models.BooleanField(default=False)
-
+    def __str__(self):
+        return self.brand.brand_name
     
 class Product(models.Model):
     product_name = models.CharField(max_length = 200, unique = True)
@@ -128,7 +130,8 @@ class Coupon(models.Model):
     is_expired = models.BooleanField(default=False)
     discount_price = models.PositiveIntegerField()
     minimum_amount = models.PositiveIntegerField()
-    
+    def __str__(self):
+        return self.coupon_code
     
 class ReviewRatings(models.Model):
     product = models.ForeignKey(Product,on_delete=models.CASCADE)
@@ -175,3 +178,5 @@ class ProductAttributes(models.Model):
     wash_care = models.CharField(max_length=25, choices=wash_care_choice)
     fit = models.CharField(max_length=25, choices=fit_choice)
     occasion = models.CharField(max_length=25, choices=occasion_choice)
+    def __str__(self):
+        return self.product.product_name

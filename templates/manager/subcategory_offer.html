@@ -9,7 +9,7 @@
             <a href="{% url 'add_sub_offer' %}" class="btn btn-info">Add New</a>
           </div>
     <div class="col-md-10">
-        
+        <h3>Sub category offers</h3>
         <div class="row">
             <hr>
             {% for offer in offers %}
@@ -18,6 +18,10 @@
                     <h5><b>Category :</b>{{offer.subcategory.category_name}}</h5> 
                     <h5><b>subcategory :</b>{{offer.subcategory.subcat_name}}</h5> 
                     Offer:{{offer.sub_category_offer}}%
+                    <br><br>
+            <a href="{% url 'remove_sub_offer' offer.id %}" class="btn btn-danger">Remove</a>
+            {% comment %} <a href="{% url 'edit_sub_offer' %}" class="btn btn-warning">Edit</a> {% endcomment %}
+
                 </div>
              </div>
             {% endfor %}

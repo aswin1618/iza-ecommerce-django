@@ -9,7 +9,7 @@
         <a href="{% url 'add_brand_offer' %}" class="btn btn-info">Add New</a>
       </div>
     <div class="col-md-10">
-        
+        <h3> Brand offers</h3>
         <div class="row">
             <hr>
             {% for offer in offers %}
@@ -17,6 +17,9 @@
                 <div class="well">
                     <h5><b>Brand Name :</b>{{offer.brand}}</h5> 
                     Offer:{{offer.brand_offer}}%
+                    <br><br>
+                    <a href="{% url 'remove_brand_offer' offer.id %}" class="btn btn-danger">Remove</a>
+                    {% comment %} <a href="{% url 'edit_brand_offer' %}" class="btn btn-warning">Edit</a> {% endcomment %}
                 </div>
              </div>
             {% endfor %}

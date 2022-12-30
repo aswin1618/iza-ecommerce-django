@@ -521,7 +521,7 @@ def add_sub_offer(request):
         return redirect('subcategory_offer')
 
     else:
-      messages.error(request, "offer with this category already exists")
+      messages.error(request, "offer with this brand already exists")
       return redirect('add_sub_offer')
   else:
     form = SubCategoryOfferForm()
@@ -529,8 +529,15 @@ def add_sub_offer(request):
       'form': form
     }
   return render(request, 'manager/add_offer_sub.html', context)
+  
 
-
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def remove_sub_offer(request,offer_id):
+  sub_cat_offer = SubcategoryOffer.objects.get(id=offer_id)
+  sub_cat_offer.delete()
+  return redirect('subcategory_offer')
 
 @never_cache
 @login_required(login_url='signin')
@@ -560,3 +567,12 @@ def add_brand_offer(request):
       'form': form
     }
   return render(request, 'manager/add_offer_brand.html', context)
+
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def remove_brand_offer(request,offer_id):
+  sub_cat_offer = SubcategoryOffer.objects.get(id=offer_id)
+  sub_cat_offer.delete()
+  return redirect('subcategory_offer')

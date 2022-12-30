@@ -36,7 +36,11 @@ urlpatterns = [
     
     path('offer_management/',views.offer_management,name='offer_management'),
     path('subcategory_offer/',views.subcategory_offer,name='subcategory_offer'),
+    path('remove_sub_offer/<int:offer_id>/',views.remove_sub_offer,name='remove_sub_offer'),
+    # path('edit_sub_offer/',views.edit_sub_offer,name='edit_sub_offer'),
     path('brand_offer/',views.brand_offer,name='brand_offer'),
+    path('remove_brand_offer/<int:offer_id>/',views.remove_brand_offer,name='remove_brand_offer'),
+    # path('edit_brand_offer/',views.edit_brand_offer,name='edit_brand_offer'),
     
     path('add_sub_offer/',views.add_sub_offer,name='add_sub_offer'),
     path('add_brand_offer/',views.add_brand_offer,name='add_brand_offer'),

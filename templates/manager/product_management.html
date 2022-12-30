@@ -48,7 +48,7 @@
             {% for product in products %}
             <tr>
               <th scope="row">{{ product.id }}</th>
-              <td><a href="{% url 'edit_product' product.id %}" class="text-dark">{{ product.product_name }}</a></td>
+              <td><a href="{% url 'edit_product' product.id %}" class="text-dark"> {{ product.brand }} {{ product.product_name }}</a></td>
               <td>{{ product.category }}</td>
               <td>{{ product.price }}</td>
               <td>{{ product.stock }}</td>

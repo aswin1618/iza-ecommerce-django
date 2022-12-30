@@ -1,11 +1,11 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from store.models import Product, Variation
+from django.shortcuts import render,redirect, get_object_or_404,HttpResponseRedirect
+from store.models import Product, Variation,Coupon
 from .models import Cart , CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
 from user.models import UserAdress,UserProfile
-
+from django.contrib import messages
 # Create your views here.
 
 def _cart_id(request):
@@ -179,13 +179,15 @@ def cart(request, total=0, quantity=0, cart_items=None):
      except ObjectDoesNotExist:
           pass
 
+     
+               
+     
+          
      context = {
           'total' : total,
           'quantity' : quantity,
           'cart_items' : cart_items
      }
-
-
      return render(request,'cart.html',context)
 
 
@@ -220,3 +222,62 @@ def checkout(request, total=0, quantity=0, cart_items=None):
      }
 
      return render (request,'checkout.html',context)
+
+
+def add_coupon(request,total=0, quantity=0, cart_items=None):
+     try:
+          if request.user.is_authenticated:
+               cart_items = CartItem.objects.filter(user=request.user, is_active=True)
+          else:
+               cart = Cart.objects.get(cart_id= _cart_id(request))
+               cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+          for cart_item in cart_items:
+               total += (cart_item.product.price() * cart_item.quantity)
+               quantity += cart_item.quantity
+     except ObjectDoesNotExist:
+          pass
+     
+     try:
+          cart = Cart.objects.get(cart_id=_cart_id(request)) #getting the cart using the cart id in the session
+     except Cart.DoesNotExist:
+          cart = Cart.objects.create(cart_id = _cart_id(request))
+     
+           
+     if request.method =='POST':
+          coupon = request.POST.get('coupon')
+          coupon_obj = Coupon.objects.filter(coupon_code__icontains = coupon)
+          if not coupon_obj.exists():
+               messages.warning(request,'coupon does not exist')
+               return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+          if coupon_obj[0].is_expired:
+               messages.warning(request,'coupon expired')
+               return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+          if cart.coupon:
+               messages.warning(request,'coupon already applied')
+               return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+          
+          if total < coupon_obj[0].minimum_amount:
+               messages.warning(request,'total exceeds coupon price limit') 
+               return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+          else:
+               messages.success(request,'Coupon Applied')
+               cart.coupon = coupon_obj[0]
+               total = total-(coupon_obj[0].discount_price) 
+               cart.total_price = total
+               cart.save()
+               return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+     context = {
+          'cart': cart,
+          'total' : total,
+          'quantity' : quantity,
+          'cart_items' : cart_items
+     }
+     return render(request,'coupon.html',context)
+          
+def remove_coupon(request, cart_id):
+     cart_obj = Cart.objects.get(id= cart_id)
+     cart_obj.total_price= cart_obj.total_price + cart_obj.coupon.discount_price
+     cart_obj.coupon = None
+     cart_obj.save()
+     messages.success(request,'coupon removed')
+     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

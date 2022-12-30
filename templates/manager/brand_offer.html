@@ -1,6 +1,8 @@
 {% extends "manager/managerbase.html" %}
 {% block content %}
-
+<div class="row" style="margin-left: 8%;">
+    <a href="{{request.META.HTTP_REFERER |escape}}" class="btn btn-primary"><i class="bi bi-arrow-left-circle-fill"> go back</i></a>
+  </div>
 <div class="container" style=background-color:#F3F2EE;>
     <br>
     <div class="text-right">

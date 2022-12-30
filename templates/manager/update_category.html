@@ -1,5 +1,9 @@
 {% extends "manager/managerbase.html" %}
 {% block content %}
+
+<div class="row" style="margin-left: 8%;">
+  <a href="{{request.META.HTTP_REFERER |escape}}" class="btn btn-primary"><i class="bi bi-arrow-left-circle-fill"> go back</i></a>
+</div>
 <section class="section-content padding-y bg">
   <div class="container card mb-5" style= background-color:#F3F2EE;>
     <div class="row d-flex justify-content-center">

@@ -1,0 +1,47 @@
+
+{% extends 'base.html' %}
+
+{% load static%}
+
+{% block content %}
+<div class="col-md-8 col-md-offset-4">
+<div class="row">
+    <div class="col-md-6">
+       <div class="well">
+          <h3 class="billing-heading mb-4">Cart Total</h3>
+          {% include 'includes/alerts.html' %}
+              <!-- coupon -->
+              <form action="" method="POST">
+                {% csrf_token %}
+                  <div class="form-group">
+                    <label> Have Coupon?</label>
+                    <div class="input-group">
+                      <input type="text" name="coupon" class="form-control">
+                      <span class="input-group-append">
+                          <button type="submit" class="btn btn-primary"> apply</button>
+                      </span>
+                    </div>
+                    <br>
+                    {% if cart.coupon %}
+                    <h4><u> Applied Coupons </u></h4>
+                    <b>{{ cart.coupon.coupon_code}} </b><a href="{% url 'remove_coupon' cart.id %}" class="btn btn-danger"> <i class="bi bi-trash3"></i></a>
+                    {% endif %}
+              </form>
+                      
+                <hr>
+                <p class="d-flex total-price">
+                    <span> Total</span>
+                    <span>₹{{ total }}</span>
+                  </p>
+                  <hr>
+                <p class="d-flex total-price">
+                  <span>Final Total</span>
+                  <span>₹{{ cart.total_price }}</span>
+                </p>
+                <a href="{% url 'checkout' %}" class="btn btn-main pull-right">Checkout</a><br>
+       </div>
+      </div>
+   </div>
+</div>
+
+   {% endblock %}

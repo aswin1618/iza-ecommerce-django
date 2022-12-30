@@ -159,7 +159,7 @@
 					</div>
 					<div class="product-content">
 						<h4><span style="cursor:pointer; "><a class="l1" href="{{ product.get_url }}">{{ product.product_name }}</a></span></h4>
-						<p class="price"><s> ₹ {{ product.stock_price }} </s> &emsp;{{ product.offer }}% off<br> <b>₹ {{ product.price }}</b></p></p>
+						<p class="price"><b> ₹ {{ product.price }} </b> &emsp;<s>₹ {{ product.stock_price }} </s><sub>{{ product.offer }}% off</sub></b></p>
 					</div>
 				</div>
 			</div>

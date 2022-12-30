@@ -40,8 +40,8 @@ class Product(models.Model):
     created_date = models.DateTimeField(auto_now_add = True)
     modified_date= models.DateTimeField(auto_now=True)
     is_featured = models.BooleanField(default = False)
-    sub_category_offer = models.ForeignKey(SubcategoryOffer,on_delete=models.CASCADE,null=True,blank=True)
-    brand_offer = models.ForeignKey(BrandOffer,on_delete=models.CASCADE,null=True,blank=True)
+    sub_category_offer = models.ForeignKey(SubcategoryOffer,on_delete=models.SET_NULL,null=True,blank=True)
+    brand_offer = models.ForeignKey(BrandOffer,on_delete=models.SET_NULL,null=True,blank=True)
 
     def get_url(self):
         print(self.slug)
@@ -49,19 +49,29 @@ class Product(models.Model):
     
     def offer (self):
         if self.sub_category_offer or self.brand_offer:
-            if self.sub_category_offer.sub_category_offer > self.brand_offer.brand_offer:
+            if self.sub_category_offer is None:
+                return self.brand_offer.brand_offer
+            elif self.brand_offer is None:
                 return self.sub_category_offer.sub_category_offer
             else:
-                return self.brand_offer.brand_offer
+                if self.sub_category_offer.sub_category_offer > self.brand_offer.brand_offer:
+                    return self.sub_category_offer.sub_category_offer
+                else:
+                    return self.brand_offer.brand_offer
         else:
             return 0
         
     def price(self):
         if self.sub_category_offer or self.brand_offer:
-            if self.sub_category_offer.sub_category_offer > self.brand_offer.brand_offer:
+            if self.sub_category_offer is None:
+                return int(self.stock_price * (1-(self.brand_offer.brand_offer/100)))
+            elif self.brand_offer is None:
                 return int(self.stock_price * (1-(self.sub_category_offer.sub_category_offer/100)))
             else:
-                return int(self.stock_price * (1-(self.brand_offer.brand_offer/100)))
+                if self.sub_category_offer.sub_category_offer > self.brand_offer.brand_offer:
+                    return int(self.stock_price * (1-(self.sub_category_offer.sub_category_offer/100)))
+                else:
+                    return int(self.stock_price * (1-(self.brand_offer.brand_offer/100)))
         else:
             return self.stock_price
             
@@ -86,6 +96,7 @@ color_choice=(
     ('violet','violet'),
     ('magenta','magenta'),
     ('pink','pink'),
+    ('black','black'),
 )
 size_choice=(
     ('XS','XS'),

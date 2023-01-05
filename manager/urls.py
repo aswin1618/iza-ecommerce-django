@@ -46,4 +46,7 @@ urlpatterns = [
     path('add_brand_offer/',views.add_brand_offer,name='add_brand_offer'),
     
     
+    path('sales_dashboard/',views.sales_dashboard,name='sales_dashboard'),
+    
+    
 ]

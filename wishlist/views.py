@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,HttpResponseRedirect
 from store.models import Product, Variation
 from .models import Wishlist
 from django.core.exceptions import ObjectDoesNotExist
@@ -23,22 +23,26 @@ def wishlist(request, quantity=0, wishlist_items=None):
             return redirect('signin')
                 
 def add_wish(request,product_id):
-    current_user = request.user
-    product = Product.objects.get(id=product_id)  #get the product
-    
-    is_wishlist_item_exists = Wishlist.objects.filter(product=product,user=current_user).exists()
-    if is_wishlist_item_exists:
-        messages.error(request,'item already in wishlist')
-        return redirect('wishlist')
+    if request.user.is_authenticated:
+        current_user = request.user
+        product = Product.objects.get(id=product_id)  #get the product
         
+        is_wishlist_item_exists = Wishlist.objects.filter(product=product,user=current_user).exists()
+        if is_wishlist_item_exists:
+            messages.error(request,'item already in wishlist')
+            return redirect('wishlist')
+            
+        else:
+            wishlist_item = Wishlist.objects.create(
+                                product = product,
+                                user = current_user,
+                        )
+            wishlist_item.save()
+            messages.success(request,'item added to wishlist')
+            return redirect('wishlist')
     else:
-        wishlist_item = Wishlist.objects.create(
-                            product = product,
-                            user = current_user,
-                    )
-        wishlist_item.save()
-        messages.success(request,'item added to wishlist')
-        return redirect('wishlist')
+        messages.warning(request,'you need to sign in access the wishlist')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
     

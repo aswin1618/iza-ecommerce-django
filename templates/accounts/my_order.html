@@ -47,12 +47,15 @@
                                    <td>₹ {{order.order_total}}</td>
                                    <td><b>{{ order.status }}</b></td>
                                    <td>{{order.created_at}}</td>
-                                   {% if order.status != 'Cancelled' %}
+                                   {% if order.status == 'Cancelled' %}
+                                    <td style="color: orange;"> <b>Cancelled</b></td>
+                                    {% elif order.status == 'Delivered' %}
+                                    <td style="color: green;"><b>Delivered</b> </td>
+                                    {% else %}
                                    <td><a href="{% url 'cancel_order' order.order_number %}"><button
                                          class="btn btn-danger">Cancel</button></a></td>
-                                         {% else %}
-                                         <td>Cancelled</td>
-                                       {% endif %}
+    
+                                    {% endif %}
              
                                  </tr>
                                  {% endfor %}

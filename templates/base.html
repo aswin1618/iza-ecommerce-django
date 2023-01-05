@@ -50,7 +50,7 @@
 
 {% block content %}
 <!--content-->
-{% endblock %}
+{% endblock content %}
 
 <!--footer-->
 {% include 'includes/footer.html'%}
@@ -79,6 +79,8 @@
     <script src="{% static 'plugins/slick/slick.min.js' %}"></script>
     <script src="{% static 'plugins/slick/slick-animation.min.js' %}"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+
+    
     <!-- Google Mapl -->
     {% comment %} <script src=" {% static 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw' %} "></script>
     <script type="text/javascript" src="{% static 'plugins/google-map/gmap.js' %}"></script> {% endcomment %}
@@ -91,10 +93,13 @@
 
     {% comment %} <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="{% static 'js/checkout.js' %}"></script> {% endcomment %}
-       
+      
+
+
+   
 {% block script %}
 
-{% endblock %}
+{% endblock script %}
       <!-- Main Js File -->
       <script src="{% static 'js/script.js' %}"></script>
     

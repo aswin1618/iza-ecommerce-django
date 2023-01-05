@@ -15,6 +15,7 @@
         <ul class="nav navbar-nav">
           <br>
             <a  {% if '/manager_dashboard/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %} href="{% url 'manager_dashboard' %}"> Manager Dashboard </a>
+            <a  {% if '/sales_dashboard/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %} href="{% url 'sales_dashboard' %}"> Sales Dashboard </a>
             <a  {% if '/user_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}  href="{% url 'user_management' %}"> User Management </a>
             <a  {% if '/product_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}   href="{% url 'product_management' %}"> Product Management </a>
             <a  {% if '/category_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}  href="{% url 'category_management' %}"> Category Management </a>
@@ -22,7 +23,6 @@
             <a  {% if '/order_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item"{% endif %}  href="{% url 'order_management' %}"> Order Management </a>
             <a  {% if '/variation_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item" {% endif %} href="{% url 'variation_management' %}"> Variation Management </a>
             <a  {% if '/offer_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item" {% endif %} href="{% url 'offer_management' %}"> Offer Management </a>
-            <a  {% if '/banner_management/' in request.path %}class="btn btn-main" {% else %}class="list-group-item" {% endif %} href="{% url 'variation_management' %}"> Banner Management </a>
             {% comment %}<a class="list-group-item {% if '/admin_change_password/' in request.path %}active{% endif %} card  mb-1 " href="{% url 'admin_change_password' %}"> Change Password </a> 
              {% endcomment %}
              

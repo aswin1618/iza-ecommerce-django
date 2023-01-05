@@ -3,13 +3,16 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required, user_passes_test
 from user.models import Account,UserProfile,UserAdress
 from store.models import Product,Variation,SubcategoryOffer,BrandOffer
-from orders.models import Order
+from orders.models import Order,OrderProduct
 from category.models import Category,SubCategory
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib import messages
 from .forms import ProductForm,CategoryForm,SubCategoryForm,VariationForm,SubCategoryOfferForm,BrandOfferForm
 
+import datetime
+from datetime import timedelta
+from django.contrib import messages
 # Create your views here.
 
 
@@ -147,6 +150,7 @@ def add_product(request):
         pass
       
       product.save()
+      messages.success(request,'Product added successfully')
       return redirect('product_management')
     else:
       print(form.errors)
@@ -173,6 +177,7 @@ def edit_product(request, product_id):
       form = ProductForm(request.POST, request.FILES, instance=product)
       if form.is_valid():
         form.save()
+        messages.success(request,'Product Edited ')
         
         return redirect('product_management')
     
@@ -193,6 +198,7 @@ def edit_product(request, product_id):
 def delete_product(request, product_id):
   product = Product.objects.get(id=product_id)
   product.delete()
+  messages.error(request,'Product deleted')
   return redirect('product_management')
 
 
@@ -223,6 +229,7 @@ def add_category(request):
         category = Category.objects.get(category_name=category_name)
         category.slug = slugify(category_name)
         category.save()
+        messages.success(request,'Category added successfully')
         return redirect('category_management')
 
     else:
@@ -242,6 +249,7 @@ def add_category(request):
 def delete_category(request, category_id):
   category = Category.objects.get(id=category_id)
   category.delete()
+  messages.success(request,'Category deleted')
   return redirect('category_management')
 
 
@@ -258,6 +266,7 @@ def update_category(request, category_id):
       form = CategoryForm(request.POST, request.FILES,instance=category)
       if form.is_valid():
         form.save()
+        messages.success(request,'Category updated')        
         return redirect('category_management')
     
     except Exception as e:
@@ -296,6 +305,7 @@ def add_sub_category(request):
         subcategory = SubCategory.objects.get(subcat_name=subcategory_name)
         subcategory.slug = str(category_name)+"-"+slugify(subcategory_name)
         subcategory.save()
+        messages.success(request,'subcategory created')
         return redirect('sub_category_management')
   else:
     form = SubCategoryForm()
@@ -314,7 +324,7 @@ def update_sub_category(request, sub_cat_id):
   if request.method == 'POST':
     form = SubCategoryForm(request.POST, instance = sub_category)
     form.save()
-
+    messages.success(request,'subcategory updated')
     return redirect('sub_category_management')
 
   context = {
@@ -330,6 +340,7 @@ def update_sub_category(request, sub_cat_id):
 def delete_sub_category(request, sub_cat_id):
   sub_category = SubCategory.objects.get(id=sub_cat_id)
   sub_category.delete()
+  messages.success(request,'subcategory deleted')
   return redirect('sub_category_management')
 
 
@@ -389,12 +400,8 @@ def manager_cancel_order(request, order_number):
   order = Order.objects.get(order_number=order_number)
   order.status = 'Cancelled'
   order.save()
-
-  if request.user.is_admin:
-    return redirect('admin_orders')
-
-  else:
-    return redirect('order_management')
+  messages.success(request,'order cancelled')
+  return redirect('order_management')
   
   
 # Manage Variation
@@ -435,6 +442,7 @@ def add_variation(request):
       product = Product.objects.get(product_name=variation_product)
       product.stock = product.stock +variation_stock
       product.save()
+      messages.success(request,'product variation added')
       return redirect('variation_management')
   
   else:
@@ -467,6 +475,7 @@ def update_variation(request, variation_id):
       product.stock = product.stock-initial_var_stock
       product.stock = product.stock+updated_var_stock
       product.save()
+      messages.success(request,'product variation updated')
       return redirect('variation_management')
   else:
     form = VariationForm(instance = variation)
@@ -488,6 +497,7 @@ def delete_variation(request, variation_id):
   variation_stock = variation.stock
   variation_product = variation.product
   variation.delete()
+  messages.success(request,'product variation deleted')
   product = Product.objects.get(product_name=variation_product)
   product.stock = product.stock - variation_stock
   product.save()
@@ -517,7 +527,7 @@ def add_sub_offer(request):
     form = SubCategoryForm(request.POST)
     if form.is_valid():
         form.save()
-        
+        messages.success(request,'offer in subcategory added')
         return redirect('subcategory_offer')
 
     else:
@@ -537,6 +547,7 @@ def add_sub_offer(request):
 def remove_sub_offer(request,offer_id):
   sub_cat_offer = SubcategoryOffer.objects.get(id=offer_id)
   sub_cat_offer.delete()
+  messages.success(request,'offer removed')
   return redirect('subcategory_offer')
 
 @never_cache
@@ -555,7 +566,7 @@ def add_brand_offer(request):
     form = BrandOfferForm(request.POST)
     if form.is_valid():
         form.save()
-        
+        messages.success(request,'brand offer added')
         return redirect('brand_offer')
 
     else:
@@ -575,4 +586,93 @@ def add_brand_offer(request):
 def remove_brand_offer(request,offer_id):
   sub_cat_offer = SubcategoryOffer.objects.get(id=offer_id)
   sub_cat_offer.delete()
+  messages.success(request,'brand offer removed')
   return redirect('subcategory_offer')
+
+
+today = datetime.date.today()
+import calendar
+
+@never_cache
+@login_required(login_url='signin')
+@user_passes_test(lambda u: u.is_admin, login_url='index')
+def sales_dashboard(request):
+      
+      
+  #weekly sale report 
+  daily_order_count=[]
+  daily_sale_amount=[]
+  this_week =[]
+  this_day = today - timedelta(days = 6)
+  
+  for x in range(7):
+    sale_today = Order.objects.filter(status='Accepted', created_at__day=this_day.day, created_at__month=today.month, created_at__year=today.year)
+    daily_amount= 0
+    sale_count=0
+    for sale in sale_today:
+      sale_count = sale_count+1
+      daily_amount = daily_amount + sale.order_total
+      
+    daily_order_count.append(sale_count)
+    daily_sale_amount.append(daily_amount)
+    this_week.append(str(this_day))
+    this_day = this_day + timedelta(days = 1)
+  
+  #yearly sale report 
+  monthly_order_count=[]
+  monthly_sale_amount=[]
+  month_list=[]
+  this_day = today
+  
+  for x in range(12):
+    sale_monthly = Order.objects.filter(status='Accepted',created_at__month=this_day.month,created_at__year=this_day.year)
+    monthly_amount= 0
+    monthly_sale_count=0
+    
+    for sale in sale_monthly:
+      monthly_sale_count = monthly_sale_count+1
+      monthly_amount = monthly_amount + sale.order_total
+      
+    monthly_order_count.append(monthly_sale_count)
+    monthly_sale_amount.append(monthly_amount)
+    first_day_of_month = this_day.replace(day = 1 )
+    month_list.append(calendar.month_abbr[this_day.month])
+    this_day = first_day_of_month - timedelta(days = 1)
+  
+  
+  
+  #inventory details
+  
+  category_list = []
+  stock_by_category = []
+  sale_by_category = []
+  categories = Category.objects.all()
+  for category in categories:
+    count=0
+    stock = 0 
+    category_list.append(category.category_name)
+    products= Product.objects.filter(category=category)
+    for product in products:  
+      stock = stock + product.stock
+      order_products = OrderProduct.objects.filter(product=product)
+      for o in order_products:
+        count = count + o.quantity
+    
+    stock_by_category.append(stock)
+    sale_by_category.append(count)
+    
+    
+  context={
+      'this_week':this_week,
+      'daily_order_count':daily_order_count,
+      'daily_sale_amount':daily_sale_amount,
+      'month_list':month_list,
+      'monthly_order_count':monthly_order_count,
+      'monthly_sale_amount':monthly_sale_amount,
+      'category_list':category_list,
+      'stock_by_category':stock_by_category,
+      'sale_by_category':sale_by_category
+  }
+    
+    
+  return render(request,'manager/sales_dashboard.html',context)

@@ -17,7 +17,7 @@ def home(request):
     categories = Category.objects.all()
     products = Product.objects.all().filter(is_available = True).order_by('-created_date')
     featured_products = Product.objects.all().filter(is_available = True,is_featured=True).order_by('id')
-    first = banners[0]
+    first = banners[0] if banners else None
     context = {
         'products' : products,
         'categories' : categories,
